@@ -1,10 +1,14 @@
 package Main;
 
+import Database.DBConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Main extends Application {
     @Override
@@ -16,6 +20,12 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+
+
+        Locale.setDefault(new Locale("fr"));
+        ResourceBundle rbFR = ResourceBundle.getBundle("C195-Scheduling-App/src/Language/Lang", Locale.getDefault());
+        DBConnection.startConn();
         launch(args);
+        DBConnection.endConn();
     }
 }

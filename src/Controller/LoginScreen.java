@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoginScreen implements Initializable {
@@ -27,3 +28,4 @@ public class LoginScreen implements Initializable {
         System.out.println("Initialized");
     }
 }
+
