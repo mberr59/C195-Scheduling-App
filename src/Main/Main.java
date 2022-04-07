@@ -1,5 +1,6 @@
 package Main;
 
+import Controller.LoginScreen;
 import Database.DBConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,10 +23,20 @@ public class Main extends Application {
     public static void main(String[] args) {
 
 
-        Locale.setDefault(new Locale("fr"));
-        ResourceBundle rbFR = ResourceBundle.getBundle("C195-Scheduling-App/src/Language/Lang", Locale.getDefault());
+        Locale.setDefault(new Locale("fr", "CA"));
         DBConnection.startConn();
         launch(args);
         DBConnection.endConn();
+    }
+
+    public static void localeCheck (Locale locale) {
+        if (locale.getLanguage().equals("fr")){
+            ResourceBundle loginLabels = ResourceBundle.getBundle("Language/Lang", locale);
+            System.out.println("Translating to French");
+            String passKey = loginLabels.getString("Password");
+            String welcomeKey = loginLabels.getString("Welcome");
+            String userKey = loginLabels.getString("Username");
+            String connKey = loginLabels.getString("Connect");
+        }
     }
 }

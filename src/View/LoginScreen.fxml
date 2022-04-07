@@ -8,17 +8,17 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.LoginScreen">
     <children>
-        <Label layoutX="219.0" layoutY="31.0" text="Welcome" textFill="#265fad">
+        <Label fx:id="welcomeLabel" layoutX="219.0" layoutY="31.0" text="Welcome" textFill="#265fad">
             <font>
                 <Font name="System Bold" size="36.0" />
             </font>
         </Label>
-        <Label layoutX="265.0" layoutY="140.0" text="Username" textFill="#265fad">
+        <Label fx:id="userLabel" layoutX="265.0" layoutY="140.0" text="Username" textFill="#265fad">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Label>
-        <Label layoutX="269.0" layoutY="228.0" text="Password" textFill="#265fad">
+        <Label fx:id="passLabel" layoutX="269.0" layoutY="228.0" text="Password" textFill="#265fad">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>

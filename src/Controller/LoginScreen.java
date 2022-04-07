@@ -1,8 +1,10 @@
 package Controller;
 
+import Main.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -13,6 +15,9 @@ public class LoginScreen implements Initializable {
     public TextField userNameText;
     public TextField passwordText;
     public Button loginButton;
+    public Label passLabel;
+    public Label welcomeLabel;
+    public Label userLabel;
 
     public void userNameTextHandler(ActionEvent actionEvent) {
     }
@@ -26,6 +31,7 @@ public class LoginScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Initialized");
+        Main.localeCheck(Locale.getDefault());
     }
 }
 
