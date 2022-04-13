@@ -28,15 +28,4 @@ public class Main extends Application {
         launch(args);
         DBConnection.endConn();
     }
-
-    public static void localeCheck (Locale locale) {
-        if (locale.getLanguage().equals("fr")){
-            ResourceBundle loginLabels = ResourceBundle.getBundle("Language/Lang", locale);
-            System.out.println("Translating to French");
-            String passKey = loginLabels.getString("Password");
-            String welcomeKey = loginLabels.getString("Welcome");
-            String userKey = loginLabels.getString("Username");
-            String connKey = loginLabels.getString("Connect");
-        }
-    }
 }

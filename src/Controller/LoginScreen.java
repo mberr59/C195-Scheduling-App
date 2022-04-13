@@ -31,7 +31,18 @@ public class LoginScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Initialized");
-        Main.localeCheck(Locale.getDefault());
+        localeCheck(Locale.getDefault());
+    }
+
+    public void localeCheck (Locale locale) {
+        if (locale.getLanguage().equals("fr")){
+            ResourceBundle loginLabels = ResourceBundle.getBundle("Language/Lang", locale);
+            System.out.println("Translating to French");
+            passLabel.setText(loginLabels.getString("Password"));
+            welcomeLabel.setText(loginLabels.getString("Welcome"));
+            userLabel.setText(loginLabels.getString("Username"));
+            loginButton.setText(loginLabels.getString("Connect"));
+        }
     }
 }
 
