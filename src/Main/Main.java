@@ -23,7 +23,7 @@ public class Main extends Application {
     public static void main(String[] args) {
 
 
-        Locale.setDefault(new Locale("fr", "CA"));
+        //Locale.setDefault(new Locale("fr", "CA"));
         DBConnection.startConn();
         launch(args);
         DBConnection.endConn();

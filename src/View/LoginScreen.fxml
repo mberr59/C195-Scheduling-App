@@ -13,19 +13,19 @@
                 <Font name="System Bold" size="36.0" />
             </font>
         </Label>
-        <Label fx:id="userLabel" layoutX="265.0" layoutY="140.0" text="Username" textFill="#265fad">
+        <Label fx:id="userLabel" layoutX="227.0" layoutY="140.0" text="Username" textFill="#265fad">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Label>
-        <Label fx:id="passLabel" layoutX="269.0" layoutY="228.0" text="Password" textFill="#265fad">
+        <Label fx:id="passLabel" layoutX="229.0" layoutY="228.0" text="Password" textFill="#265fad">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Label>
         <TextField fx:id="userNameText" layoutX="226.0" layoutY="160.0" onAction="#userNameTextHandler" />
-        <TextField fx:id="passwordText" layoutX="227.0" layoutY="248.0" onAction="#passwordTextHandler" />
+        <TextField fx:id="passwordText" layoutX="226.0" layoutY="248.0" onAction="#passwordTextHandler" />
         <Button fx:id="loginButton" layoutX="248.0" layoutY="306.0" minWidth="100.0" mnemonicParsing="false" onAction="#loginButtonHandler" prefWidth="100.0" text="Connect" />
-      <Label layoutX="14.0" layoutY="14.0" text="English/Français" textFill="#265fad" />
+      <Label fx:id="zoneLabel" layoutX="14.0" layoutY="14.0" text="English" textFill="#265fad" />
     </children>
 </AnchorPane>

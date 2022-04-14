@@ -1,6 +1,6 @@
 package Controller;
 
-import Main.Main;
+import java.time.ZoneId;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,6 +18,8 @@ public class LoginScreen implements Initializable {
     public Label passLabel;
     public Label welcomeLabel;
     public Label userLabel;
+    public Label zoneLabel;
+    private ZoneId z = ZoneId.systemDefault();
 
     public void userNameTextHandler(ActionEvent actionEvent) {
     }
@@ -31,6 +33,7 @@ public class LoginScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Initialized");
+        zoneLabel.setText("Zone: " + z.getId());
         localeCheck(Locale.getDefault());
     }
 
