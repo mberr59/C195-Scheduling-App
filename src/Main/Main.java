@@ -1,15 +1,11 @@
 package Main;
 
-import Controller.LoginScreen;
-import Database.DBConnection;
+import DAO.DBConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class Main extends Application {
     @Override
