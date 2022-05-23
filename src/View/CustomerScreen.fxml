@@ -11,10 +11,10 @@
       <TableView fx:id="customerTable" layoutX="51.0" layoutY="109.0" prefHeight="200.0" prefWidth="501.0">
         <columns>
           <TableColumn fx:id="customerTableId" prefWidth="50.0" text="ID" />
-          <TableColumn fx:id="customerTableName" prefWidth="143.0" text="Name" />
-            <TableColumn fx:id="customerTableAddress" prefWidth="146.0" text="Address" />
-            <TableColumn fx:id="customerTablePhone" prefWidth="108.0" text="Phone" />
-            <TableColumn fx:id="customerTablePostal" prefWidth="53.0" text="Postal" />
+          <TableColumn fx:id="customerTableName" prefWidth="112.0" text="Name" />
+            <TableColumn fx:id="customerTableAddress" prefWidth="160.0" text="Address" />
+            <TableColumn fx:id="customerTablePhone" prefWidth="104.0" text="Phone" />
+            <TableColumn fx:id="customerTablePostal" prefWidth="74.0" text="Postal" />
         </columns>
       </TableView>
    </children>

@@ -29,7 +29,7 @@ public class CustomerScreen implements Initializable {
         try {
             ObservableList<Customer> customerData = FXCollections.observableArrayList();
             Connection conn = DBConnection.getConn();
-            String query = QueryExecutions.getSelectQuery();
+            String query = QueryExecutions.getSelectCustomerQuery();
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
 
