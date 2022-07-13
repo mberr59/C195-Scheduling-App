@@ -5,7 +5,9 @@ import DAO.QueryExecutions;
 import Main.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -24,6 +26,9 @@ public class CustomerScreen implements Initializable {
     public TableColumn customerTableAddress;
     public TableColumn customerTablePhone;
     public TableColumn customerTablePostal;
+    public Button addCustomerButton;
+    public Button modifyCustomerButton;
+    public Button exitCustomerButton;
 
     public void populateCustomerTable(){
         try {
@@ -59,5 +64,14 @@ public class CustomerScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         populateCustomerTable();
+    }
+
+    public void addButtonHandler(ActionEvent actionEvent) {
+    }
+
+    public void modifyButtonHandler(ActionEvent actionEvent) {
+    }
+
+    public void exitButtonHandler(ActionEvent actionEvent) {
     }
 }

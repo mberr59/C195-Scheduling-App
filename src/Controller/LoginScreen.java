@@ -40,7 +40,7 @@ public class LoginScreen implements Initializable {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AppointmentScreen.fxml")));
             Stage appStage = new Stage();
             appStage.setTitle("Appointment Screen");
-            appStage.setScene(new Scene(root, 600, 450));
+            appStage.setScene(new Scene(root, 900, 600));
             appStage.show();
         } catch (IOException ioe){
             ioe.printStackTrace();
