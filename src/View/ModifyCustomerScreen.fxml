@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="Controller.ModifyCustomerScreen"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ModifyCustomerScreen">
+    <Label layoutX="14.0" layoutY="14.0" text="Modify Customer">
+        <font>
+            <Font name="System Bold" size="18.0" />
+        </font>
+    </Label>
+    <Label layoutX="164.0" layoutY="80.0" text="Customer ID" />
+    <TextField fx:id="ModCustIDTF" disable="true" editable="false" layoutX="251.0" layoutY="76.0" promptText="Auto-Generated" />
+    <Label layoutX="164.0" layoutY="117.0" text="Name" />
+    <TextField fx:id="ModCustNameTF" layoutX="251.0" layoutY="113.0" />
+    <TextField fx:id="ModCustAddrTF" layoutX="251.0" layoutY="152.0" />
+    <TextField fx:id="ModCustPostalTF" layoutX="251.0" layoutY="188.0" />
+    <Label layoutX="164.0" layoutY="156.0" text="Address" />
+    <Label layoutX="164.0" layoutY="192.0" text="Postal/Zip Code" />
+    <Label layoutX="165.0" layoutY="229.0" text="Phone" />
+    <TextField fx:id="ModCustPhoneTF" layoutX="251.0" layoutY="225.0" />
+    <ComboBox fx:id="ModCustCountryCB" layoutX="251.0" layoutY="267.0" prefWidth="150.0" />
+    <Label layoutX="165.0" layoutY="271.0" text="Country" />
+    <Label layoutX="166.0" layoutY="308.0" text="State/Province" />
+    <ComboBox fx:id="ModCustStateCB" layoutX="251.0" layoutY="304.0" prefWidth="150.0" />
+    <Button fx:id="ModCustSaveBn" layoutX="400.0" layoutY="350.0" maxWidth="55.0" minWidth="55.0" mnemonicParsing="false" onAction="#ModCustSaveHandler" prefWidth="55.0" text="Save" />
+    <Button fx:id="ModCustCancelBn" layoutX="480.0" layoutY="350.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#ModCustCancelHandler" prefWidth="55.0" text="Cancel" />
 </AnchorPane>

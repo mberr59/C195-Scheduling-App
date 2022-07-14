@@ -18,8 +18,9 @@
             <TableColumn fx:id="customerTablePostal" prefWidth="74.0" text="Postal" />
         </columns>
       </TableView>
-      <Button fx:id="addCustomerButton" layoutX="317.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addButtonHandler" prefWidth="55.0" text="Add" />
-      <Button fx:id="modifyCustomerButton" layoutX="398.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#modifyButtonHandler" prefWidth="55.0" text="Modify" />
+      <Button fx:id="addCustomerButton" layoutX="262.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addButtonHandler" prefWidth="55.0" text="Add" />
+      <Button fx:id="modifyCustomerButton" layoutX="335.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#modifyButtonHandler" prefWidth="55.0" text="Modify" />
       <Button fx:id="exitCustomerButton" layoutX="480.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exitButtonHandler" prefWidth="55.0" text="Exit" />
+      <Button fx:id="deleteCustomerButton" layoutX="406.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteButtonHandler" prefWidth="55.0" text="Delete" />
    </children>
 </AnchorPane>

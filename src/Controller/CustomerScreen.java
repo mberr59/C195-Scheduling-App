@@ -6,18 +6,24 @@ import Main.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class CustomerScreen implements Initializable {
@@ -30,6 +36,7 @@ public class CustomerScreen implements Initializable {
     public Button addCustomerButton;
     public Button modifyCustomerButton;
     public Button exitCustomerButton;
+    public Button deleteCustomerButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -37,9 +44,36 @@ public class CustomerScreen implements Initializable {
     }
 
     public void addButtonHandler(ActionEvent actionEvent) {
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AddCustomerScreen.fxml")));
+            Stage appStage = new Stage();
+            appStage.setTitle("Add Customer Screen");
+            appStage.setScene(new Scene(root));
+            appStage.show();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
     }
 
     public void modifyButtonHandler(ActionEvent actionEvent) {
+        if (customerTable.getSelectionModel().isEmpty()) {
+            Alert selectionAlert = new Alert(Alert.AlertType.ERROR);
+            selectionAlert.setTitle("Selection Error");
+            selectionAlert.setContentText("Please select a customer to modify.");
+            selectionAlert.showAndWait();
+        } else {
+            try {
+                Parent root;
+                root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/ModifyCustomerScreen.fxml")));
+                Stage appStage = new Stage();
+                appStage.setTitle("Modify Customer Screen");
+                appStage.setScene(new Scene(root));
+                appStage.show();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
     }
 
     public void exitButtonHandler(ActionEvent actionEvent) {
@@ -76,5 +110,8 @@ public class CustomerScreen implements Initializable {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+    }
+
+    public void deleteButtonHandler(ActionEvent actionEvent) {
     }
 }
