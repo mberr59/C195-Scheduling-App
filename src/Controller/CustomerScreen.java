@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -20,15 +21,31 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 
 public class CustomerScreen implements Initializable {
-    public TableView customerTable;
-    public TableColumn customerTableId;
-    public TableColumn customerTableName;
-    public TableColumn customerTableAddress;
-    public TableColumn customerTablePhone;
-    public TableColumn customerTablePostal;
+    public TableView<Customer> customerTable;
+    public TableColumn<Customer,Integer> customerTableId;
+    public TableColumn<Customer,String> customerTableName;
+    public TableColumn<Customer,String> customerTableAddress;
+    public TableColumn<Customer,String> customerTablePhone;
+    public TableColumn<Customer,String> customerTablePostal;
     public Button addCustomerButton;
     public Button modifyCustomerButton;
     public Button exitCustomerButton;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        populateCustomerTable();
+    }
+
+    public void addButtonHandler(ActionEvent actionEvent) {
+    }
+
+    public void modifyButtonHandler(ActionEvent actionEvent) {
+    }
+
+    public void exitButtonHandler(ActionEvent actionEvent) {
+        Stage stage = (Stage) exitCustomerButton.getScene().getWindow();
+        stage.close();
+    }
 
     public void populateCustomerTable(){
         try {
@@ -59,19 +76,5 @@ public class CustomerScreen implements Initializable {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        populateCustomerTable();
-    }
-
-    public void addButtonHandler(ActionEvent actionEvent) {
-    }
-
-    public void modifyButtonHandler(ActionEvent actionEvent) {
-    }
-
-    public void exitButtonHandler(ActionEvent actionEvent) {
     }
 }
