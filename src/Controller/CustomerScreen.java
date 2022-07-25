@@ -2,7 +2,7 @@ package Controller;
 
 import DAO.DBConnection;
 import DAO.QueryExecutions;
-import Main.Customer;
+import Model.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,13 +44,18 @@ public class CustomerScreen implements Initializable {
     }
 
     public void addButtonHandler(ActionEvent actionEvent) {
-        Parent root;
         try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AddCustomerScreen.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/AddCustomerScreen.fxml"));
+            Parent root = loader.load();
+
+            AddCustomerScreen addCustomer = loader.getController();
+            addCustomer.PopulateCountryCB();
+
             Stage appStage = new Stage();
             appStage.setTitle("Add Customer Screen");
             appStage.setScene(new Scene(root));
             appStage.show();
+
         } catch (IOException ioe){
             ioe.printStackTrace();
         }

@@ -11,4 +11,12 @@ public class QueryExecutions {
     public static String getSelectAppointmentQuery(){
         return "SELECT * FROM appointments";
     }
+
+    public static String getCountriesQuery(){
+        return "SELECT Country FROM countries";
+    }
+
+    public static String getStatesQuery(int countryID){
+        return "SELECT Division FROM first_level_divisions WHERE Country_ID = " + countryID;
+    }
 }
