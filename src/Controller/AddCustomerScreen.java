@@ -11,10 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class AddCustomerScreen {
     public TextField AddCustNameTF;
@@ -25,11 +22,18 @@ public class AddCustomerScreen {
     public ComboBox<String> AddCustStateCB;
     public Button AddCustSaveBn;
     public Button AddCustCancelBn;
+    private static int country_ID;
 
 
 
 
     public void AddCustSaveHandler() {
+        Connection conn = DBConnection.getConn();
+        String custName = AddCustNameTF.getText();
+        String custPhone = AddCustPhoneTF.getText();
+        String custAddr = AddCustAddrTF.getText();
+        String custPostal = AddCustPostalTF.getText();
+
     }
 
     public void AddCustCancelHandler() {
@@ -59,26 +63,20 @@ public class AddCustomerScreen {
 
     public void PopulateStateCB() {
         try {
-            int countryID = 0;
-            switch (AddCustCountryCB.getSelectionModel().getSelectedItem()) {
-                case "U.S" -> countryID = 1;
-                case "UK" -> countryID = 2;
-                case "Canada" -> countryID = 3;
-                default -> {
-                    Alert selectionAlert = new Alert(Alert.AlertType.ERROR);
-                    selectionAlert.setTitle("Selection Error");
-                    selectionAlert.setContentText("Please select a valid country.");
-                    selectionAlert.showAndWait();
-                }
-            }
             ObservableList<String> stateData = FXCollections.observableArrayList();
+            String countryName = AddCustCountryCB.getSelectionModel().getSelectedItem();
             Connection conn = DBConnection.getConn();
-            String query = QueryExecutions.getStatesQuery(countryID);
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
+            PreparedStatement countryStatement = conn.prepareStatement(QueryExecutions.getCountriesIDQuery());
+            countryStatement.setString(1, countryName);
+            ResultSet countryRS = countryStatement.executeQuery();
+            countryRS.next();
+            country_ID = countryRS.getInt("Country_ID");
+            String stateQuery = QueryExecutions.getStatesQuery(country_ID);
+            Statement stateSt = conn.createStatement();
+            ResultSet stateRS = stateSt.executeQuery(stateQuery);
 
-            while (rs.next()) {
-                String result = rs.getString("Division");
+            while (stateRS.next()) {
+                String result = stateRS.getString("Division");
                 stateData.add(result);
             }
             AddCustStateCB.setItems(stateData);
