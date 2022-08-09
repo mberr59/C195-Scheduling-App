@@ -1,8 +1,9 @@
 package DAO;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-public class QueryExecutions {
+public abstract class QueryExecutions {
 
     //Sql SELECT query for the customers table
     public static String getSelectCustomerQuery(){
@@ -26,8 +27,12 @@ public class QueryExecutions {
         return "SELECT Division FROM first_level_divisions WHERE Country_ID = " + countryID;
     }
 
+    public static String getDivisionID() {
+        return "SELECT Division_ID FROM first_level_divisions WHERE Division = ?";
+    }
+
     public static String addCustomerQuery(){
-        return " insert into customers (Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
+        return " INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
                 "values (?, ?, ?, ?, ?)";
     }
 }

@@ -37,6 +37,7 @@ public class CustomerScreen implements Initializable {
     public Button modifyCustomerButton;
     public Button exitCustomerButton;
     public Button deleteCustomerButton;
+    public Button refreshDataButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -118,5 +119,9 @@ public class CustomerScreen implements Initializable {
     }
 
     public void deleteButtonHandler(ActionEvent actionEvent) {
+    }
+
+    public void refreshDataHandler(ActionEvent actionEvent) {
+        populateCustomerTable();
     }
 }

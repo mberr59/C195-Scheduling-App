@@ -22,5 +22,6 @@
       <Button fx:id="modifyCustomerButton" layoutX="335.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#modifyButtonHandler" prefWidth="55.0" text="Modify" />
       <Button fx:id="exitCustomerButton" layoutX="480.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exitButtonHandler" prefWidth="55.0" text="Exit" />
       <Button fx:id="deleteCustomerButton" layoutX="406.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteButtonHandler" prefWidth="55.0" text="Delete" />
+      <Button fx:id="refreshDataButton" layoutX="482.0" layoutY="50.0" mnemonicParsing="false" onAction="#refreshDataHandler" text="Refresh" />
    </children>
 </AnchorPane>
