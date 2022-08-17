@@ -11,19 +11,19 @@
         </font>
     </Label>
     <Label layoutX="164.0" layoutY="80.0" text="Customer ID" />
-    <TextField fx:id="ModCustIDTF" disable="true" editable="false" layoutX="251.0" layoutY="76.0" promptText="Auto-Generated" />
+    <TextField fx:id="modCustIDTF" disable="true" editable="false" layoutX="251.0" layoutY="76.0" promptText="Auto-Generated" />
     <Label layoutX="164.0" layoutY="117.0" text="Name" />
-    <TextField fx:id="ModCustNameTF" layoutX="251.0" layoutY="113.0" />
-    <TextField fx:id="ModCustAddrTF" layoutX="251.0" layoutY="152.0" />
-    <TextField fx:id="ModCustPostalTF" layoutX="251.0" layoutY="188.0" />
+    <TextField fx:id="modCustNameTF" layoutX="251.0" layoutY="113.0" />
+    <TextField fx:id="modCustAddrTF" layoutX="251.0" layoutY="152.0" />
+    <TextField fx:id="modCustPostalTF" layoutX="251.0" layoutY="188.0" />
     <Label layoutX="164.0" layoutY="156.0" text="Address" />
     <Label layoutX="164.0" layoutY="192.0" text="Postal/Zip Code" />
     <Label layoutX="165.0" layoutY="229.0" text="Phone" />
-    <TextField fx:id="ModCustPhoneTF" layoutX="251.0" layoutY="225.0" />
-    <ComboBox fx:id="ModCustCountryCB" layoutX="251.0" layoutY="267.0" prefWidth="150.0" />
+    <TextField fx:id="modCustPhoneTF" layoutX="251.0" layoutY="225.0" />
+    <ComboBox fx:id="modCustCountryCB" layoutX="251.0" layoutY="267.0" prefWidth="150.0" />
     <Label layoutX="165.0" layoutY="271.0" text="Country" />
     <Label layoutX="166.0" layoutY="308.0" text="State/Province" />
-    <ComboBox fx:id="ModCustStateCB" layoutX="251.0" layoutY="304.0" prefWidth="150.0" />
-    <Button fx:id="ModCustSaveBn" layoutX="400.0" layoutY="350.0" maxWidth="55.0" minWidth="55.0" mnemonicParsing="false" onAction="#ModCustSaveHandler" prefWidth="55.0" text="Save" />
-    <Button fx:id="ModCustCancelBn" layoutX="480.0" layoutY="350.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#ModCustCancelHandler" prefWidth="55.0" text="Cancel" />
+    <ComboBox fx:id="modCustStateCB" layoutX="251.0" layoutY="304.0" prefWidth="150.0" />
+    <Button fx:id="modCustSaveBn" layoutX="400.0" layoutY="350.0" maxWidth="55.0" minWidth="55.0" mnemonicParsing="false" onAction="#modCustSaveHandler" prefWidth="55.0" text="Save" />
+    <Button fx:id="modCustCancelBn" layoutX="480.0" layoutY="350.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#modCustCancelHandler" prefWidth="55.0" text="Cancel" />
 </AnchorPane>

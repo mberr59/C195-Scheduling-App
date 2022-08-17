@@ -23,36 +23,7 @@ public class AddCustomerScreen {
     public Button AddCustCancelBn;
 
 
-    public void AddCustSaveHandler() {
-        Connection conn = DBConnection.getConn();
-        String custName = AddCustNameTF.getText();
-        String custPhone = AddCustPhoneTF.getText();
-        String custAddr = AddCustAddrTF.getText();
-        String custPostal = AddCustPostalTF.getText();
-        String custDivision = AddCustStateCB.getSelectionModel().getSelectedItem();
-        try{
-            PreparedStatement divisionStatement = conn.prepareStatement(QueryExecutions.getDivisionID());
-            divisionStatement.setString(1, custDivision);
-            ResultSet divisionRS = divisionStatement.executeQuery();
-            divisionRS.next();
-            int divisionID = divisionRS.getInt("Division_ID");
-            PreparedStatement addCustomerData = conn.prepareStatement(QueryExecutions.addCustomerQuery());
-            addCustomerData.setString(1, custName);
-            addCustomerData.setString(2, custAddr);
-            addCustomerData.setString(3, custPostal);
-            addCustomerData.setString(4, custPhone);
-            addCustomerData.setInt(5, divisionID);
-            int updatedRows = addCustomerData.executeUpdate();
-            if(updatedRows > 0){
-                System.out.println("Insert Successful");
-            } else {
-                System.out.println("Insert Unsuccessful");
-            }
-
-        } catch (SQLException sqlException){
-            sqlException.printStackTrace();
-        }
-    }
+    public void AddCustSaveHandler() { addingCustomerData(); }
 
     public void AddCustCancelHandler() {
         Stage stage = (Stage) AddCustCancelBn.getScene().getWindow();
@@ -89,12 +60,12 @@ public class AddCustomerScreen {
             ResultSet countryRS = countryStatement.executeQuery();
             countryRS.next();
             int country_ID = countryRS.getInt("Country_ID");
-            String stateQuery = QueryExecutions.getStatesQuery(country_ID);
-            Statement stateSt = conn.createStatement();
-            ResultSet stateRS = stateSt.executeQuery(stateQuery);
+            PreparedStatement fldStatement = conn.prepareStatement(QueryExecutions.getStatesQuery());
+            fldStatement.setInt(1, country_ID);
+            ResultSet fldRS = fldStatement.executeQuery();
 
-            while (stateRS.next()) {
-                String result = stateRS.getString("Division");
+            while (fldRS.next()) {
+                String result = fldRS.getString("Division");
                 stateData.add(result);
             }
             AddCustStateCB.setItems(stateData);
@@ -105,7 +76,38 @@ public class AddCustomerScreen {
 
     }
 
-    public void SelectingCountryHandler() {
+    public void selectingCountryHandler() {
         PopulateStateCB();
+    }
+
+    public void addingCustomerData() {
+        Connection conn = DBConnection.getConn();
+        String custName = AddCustNameTF.getText();
+        String custPhone = AddCustPhoneTF.getText();
+        String custAddr = AddCustAddrTF.getText();
+        String custPostal = AddCustPostalTF.getText();
+        String custDivision = AddCustStateCB.getSelectionModel().getSelectedItem();
+        try{
+            PreparedStatement divisionStatement = conn.prepareStatement(QueryExecutions.getDivisionID());
+            divisionStatement.setString(1, custDivision);
+            ResultSet divisionRS = divisionStatement.executeQuery();
+            divisionRS.next();
+            int divisionID = divisionRS.getInt("Division_ID");
+            PreparedStatement addCustomerData = conn.prepareStatement(QueryExecutions.addCustomerQuery());
+            addCustomerData.setString(1, custName);
+            addCustomerData.setString(2, custAddr);
+            addCustomerData.setString(3, custPostal);
+            addCustomerData.setString(4, custPhone);
+            addCustomerData.setInt(5, divisionID);
+            int updatedRows = addCustomerData.executeUpdate();
+            if(updatedRows > 0){
+                System.out.println("Insert Successful");
+            } else {
+                System.out.println("Insert Unsuccessful");
+            }
+
+        } catch (SQLException sqlException){
+            sqlException.printStackTrace();
+        }
     }
 }

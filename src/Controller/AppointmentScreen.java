@@ -13,13 +13,13 @@ import java.util.Objects;
 public class AppointmentScreen {
     public Button selectButton;
 
-    public void selectButtonHandler(ActionEvent actionEvent) {
+    public void selectButtonHandler() {
         Parent root;
         try {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/CustomerScreen.fxml")));
             Stage appStage = new Stage();
             appStage.setTitle("Customer Screen");
-            appStage.setScene(new Scene(root, 600, 450));
+            appStage.setScene(new Scene(root));
             appStage.show();
         } catch (IOException ioe){
             ioe.printStackTrace();

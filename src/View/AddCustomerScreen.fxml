@@ -23,7 +23,7 @@
       <Label layoutX="164.0" layoutY="192.0" text="Postal/Zip Code" />
       <Label layoutX="165.0" layoutY="229.0" text="Phone" />
       <TextField fx:id="AddCustPhoneTF" layoutX="251.0" layoutY="225.0" />
-      <ComboBox fx:id="AddCustCountryCB" layoutX="251.0" layoutY="267.0" onAction="#SelectingCountryHandler" prefWidth="150.0" />
+      <ComboBox fx:id="AddCustCountryCB" layoutX="251.0" layoutY="267.0" onAction="#selectingCountryHandler" prefWidth="150.0" />
       <Label layoutX="165.0" layoutY="271.0" text="Country" />
       <Label layoutX="166.0" layoutY="308.0" text="State/Province" />
       <ComboBox fx:id="AddCustStateCB" layoutX="251.0" layoutY="304.0" prefWidth="150.0" />

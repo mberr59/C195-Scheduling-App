@@ -6,23 +6,23 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AppointmentScreen">
-   <children>
-      <Label layoutX="375.0" layoutY="14.0" text="Appointment Screen" />
-      <Button fx:id="selectButton" layoutX="402.0" layoutY="483.0" mnemonicParsing="false" onAction="#selectButtonHandler" text="Select" />
-      <TableView layoutX="26.0" layoutY="58.0" prefHeight="402.0" prefWidth="847.0">
-        <columns>
-          <TableColumn prefWidth="107.0" text="Appointment_ID" />
-          <TableColumn prefWidth="82.0" text="Title" />
-            <TableColumn prefWidth="111.0" text="Description" />
-            <TableColumn minWidth="0.0" prefWidth="77.0" text="Location" />
-            <TableColumn prefWidth="57.0" text="Contact" />
-            <TableColumn prefWidth="42.0" text="Type" />
-            <TableColumn prefWidth="119.0" text="Start Date and Time" />
-            <TableColumn prefWidth="112.0" text="End Date and Time" />
-            <TableColumn prefWidth="87.0" text="Customer_ID" />
-            <TableColumn prefWidth="52.0" text="User_ID" />
-        </columns>
-      </TableView>
-   </children>
+<AnchorPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.AppointmentScreen">
+    <Label layoutX="375.0" layoutY="14.0" text="Appointment Screen"/>
+    <Button fx:id="selectButton" layoutX="402.0" layoutY="483.0" mnemonicParsing="false" onAction="#selectButtonHandler"
+            text="Select"/>
+    <TableView layoutX="26.0" layoutY="58.0" prefHeight="402.0" prefWidth="847.0">
+      <columns>
+          <TableColumn prefWidth="107.0" text="Appointment_ID"/>
+          <TableColumn prefWidth="82.0" text="Title"/>
+          <TableColumn prefWidth="111.0" text="Description"/>
+          <TableColumn minWidth="0.0" prefWidth="77.0" text="Location"/>
+          <TableColumn prefWidth="57.0" text="Contact"/>
+          <TableColumn prefWidth="42.0" text="Type"/>
+          <TableColumn prefWidth="119.0" text="Start Date and Time"/>
+          <TableColumn prefWidth="112.0" text="End Date and Time"/>
+          <TableColumn prefWidth="87.0" text="Customer_ID"/>
+          <TableColumn prefWidth="52.0" text="User_ID"/>
+      </columns>
+    </TableView>
 </AnchorPane>

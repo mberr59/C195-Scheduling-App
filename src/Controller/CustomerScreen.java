@@ -5,7 +5,6 @@ import DAO.QueryExecutions;
 import Model.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -19,10 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -33,6 +29,7 @@ public class CustomerScreen implements Initializable {
     public TableColumn<Customer,String> customerTableAddress;
     public TableColumn<Customer,String> customerTablePhone;
     public TableColumn<Customer,String> customerTablePostal;
+    public TableColumn<Customer,String> customerTableFLD;
     public Button addCustomerButton;
     public Button modifyCustomerButton;
     public Button exitCustomerButton;
@@ -44,7 +41,7 @@ public class CustomerScreen implements Initializable {
         populateCustomerTable();
     }
 
-    public void addButtonHandler(ActionEvent actionEvent) {
+    public void addButtonHandler() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/AddCustomerScreen.fxml"));
             Parent root = loader.load();
@@ -62,27 +59,29 @@ public class CustomerScreen implements Initializable {
         }
     }
 
-    public void modifyButtonHandler(ActionEvent actionEvent) {
-        if (customerTable.getSelectionModel().isEmpty()) {
+    public void modifyButtonHandler() {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/ModifyCustomerScreen.fxml")));
+            Parent root = loader.load();
+
+            ModifyCustomerScreen modCustomer = loader.getController();
+            modCustomer.populateCustomerFields(customerTable.getSelectionModel().getSelectedItem());
+            Stage appStage = new Stage();
+            appStage.setTitle("Modify Customer Screen");
+            appStage.setScene(new Scene(root));
+            appStage.show();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (NullPointerException npe) {
             Alert selectionAlert = new Alert(Alert.AlertType.ERROR);
             selectionAlert.setTitle("Selection Error");
             selectionAlert.setContentText("Please select a customer to modify.");
             selectionAlert.showAndWait();
-        } else {
-            try {
-                Parent root;
-                root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/ModifyCustomerScreen.fxml")));
-                Stage appStage = new Stage();
-                appStage.setTitle("Modify Customer Screen");
-                appStage.setScene(new Scene(root));
-                appStage.show();
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
         }
     }
 
-    public void exitButtonHandler(ActionEvent actionEvent) {
+    public void exitButtonHandler() {
         Stage stage = (Stage) exitCustomerButton.getScene().getWindow();
         stage.close();
     }
@@ -102,8 +101,14 @@ public class CustomerScreen implements Initializable {
                 String address = rs.getString("Address");
                 String postal = rs.getString("Postal_Code");
                 String phone = rs.getString("Phone");
+                int divisionID = rs.getInt("Division_ID");
+                PreparedStatement divisionNameStatement = conn.prepareStatement(QueryExecutions.getDivisionName());
+                divisionNameStatement.setInt(1, divisionID);
+                ResultSet divisionNameRS = divisionNameStatement.executeQuery();
+                divisionNameRS.next();
+                String divisionName = divisionNameRS.getString("Division");
 
-                Customer customer = new Customer(id, name, address, postal, phone);
+                Customer customer = new Customer(id, name, address, postal, phone, divisionName);
                 customerData.add(customer);
 
             }
@@ -112,16 +117,17 @@ public class CustomerScreen implements Initializable {
             customerTableAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
             customerTablePostal.setCellValueFactory(new PropertyValueFactory<>("postal"));
             customerTablePhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            customerTableFLD.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
             customerTable.setItems(customerData);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
     }
 
-    public void deleteButtonHandler(ActionEvent actionEvent) {
+    public void deleteButtonHandler() {
     }
 
-    public void refreshDataHandler(ActionEvent actionEvent) {
+    public void refreshDataHandler() {
         populateCustomerTable();
     }
 }

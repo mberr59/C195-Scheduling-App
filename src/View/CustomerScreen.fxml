@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerScreen">
-   <children>
-      <Label layoutX="272.0" layoutY="62.0" text="Customer Screen" />
-      <TableView fx:id="customerTable" layoutX="51.0" layoutY="109.0" prefHeight="200.0" prefWidth="501.0">
-        <columns>
+<AnchorPane prefHeight="400.0" prefWidth="730.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerScreen">
+    <Label layoutX="320.0" layoutY="67.0" text="Customer Screen" />
+    <TableView fx:id="customerTable" layoutX="21.0" layoutY="115.0" prefHeight="200.0" prefWidth="688.0">
+      <columns>
           <TableColumn fx:id="customerTableId" prefWidth="50.0" text="ID" />
           <TableColumn fx:id="customerTableName" prefWidth="112.0" text="Name" />
-            <TableColumn fx:id="customerTableAddress" prefWidth="160.0" text="Address" />
-            <TableColumn fx:id="customerTablePhone" prefWidth="104.0" text="Phone" />
-            <TableColumn fx:id="customerTablePostal" prefWidth="74.0" text="Postal" />
-        </columns>
-      </TableView>
-      <Button fx:id="addCustomerButton" layoutX="262.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addButtonHandler" prefWidth="55.0" text="Add" />
-      <Button fx:id="modifyCustomerButton" layoutX="335.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#modifyButtonHandler" prefWidth="55.0" text="Modify" />
-      <Button fx:id="exitCustomerButton" layoutX="480.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exitButtonHandler" prefWidth="55.0" text="Exit" />
-      <Button fx:id="deleteCustomerButton" layoutX="406.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteButtonHandler" prefWidth="55.0" text="Delete" />
-      <Button fx:id="refreshDataButton" layoutX="482.0" layoutY="50.0" mnemonicParsing="false" onAction="#refreshDataHandler" text="Refresh" />
-   </children>
+          <TableColumn fx:id="customerTableAddress" prefWidth="196.00001525878906" text="Address" />
+          <TableColumn fx:id="customerTablePhone" prefWidth="87.0" text="Phone" />
+          <TableColumn fx:id="customerTablePostal" prefWidth="69.5999755859375" text="Postal" />
+          <TableColumn fx:id="customerTableFLD" prefWidth="171.20001220703125" text="First-level Division" />
+      </columns>
+    </TableView>
+    <Button fx:id="addCustomerButton" layoutX="262.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addButtonHandler" prefWidth="55.0" text="Add" />
+    <Button fx:id="modifyCustomerButton" layoutX="335.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#modifyButtonHandler" prefWidth="55.0" text="Modify" />
+    <Button fx:id="exitCustomerButton" layoutX="480.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exitButtonHandler" prefWidth="55.0" text="Exit" />
+    <Button fx:id="deleteCustomerButton" layoutX="406.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteButtonHandler" prefWidth="55.0" text="Delete" />
+    <Button fx:id="refreshDataButton" layoutX="535.0" layoutY="41.0" mnemonicParsing="false" onAction="#refreshDataHandler" text="Refresh" />
 </AnchorPane>

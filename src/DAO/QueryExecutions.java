@@ -1,7 +1,5 @@
 package DAO;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 public abstract class QueryExecutions {
 
@@ -23,16 +21,24 @@ public abstract class QueryExecutions {
         return "SELECT Country_ID FROM countries WHERE Country = ?";
     }
 
-    public static String getStatesQuery(int countryID){
-        return "SELECT Division FROM first_level_divisions WHERE Country_ID = " + countryID;
-    }
+    public static String getCountriesName() { return "SELECT Country FROM countries WHERE Country_ID = ?"; }
+
+    public static String getFLDCountriesID() { return "SELECT Country_ID FROM first_level_divisions WHERE Division = ?"; }
+
+    public static String getStatesQuery(){ return "SELECT Division FROM first_level_divisions WHERE Country_ID = ?"; }
 
     public static String getDivisionID() {
         return "SELECT Division_ID FROM first_level_divisions WHERE Division = ?";
     }
 
+    public static String getDivisionName() { return "SELECT Division FROM first_level_divisions WHERE Division_ID = ?"; }
+
     public static String addCustomerQuery(){
         return " INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
                 "values (?, ?, ?, ?, ?)";
+    }
+
+    public static String updateCustomerQuery(){
+        return "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
     }
 }
