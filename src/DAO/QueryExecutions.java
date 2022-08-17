@@ -41,4 +41,6 @@ public abstract class QueryExecutions {
     public static String updateCustomerQuery(){
         return "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
     }
+
+    public static String getContactsQuery() { return "SELECT Contact_Name FROM contacts WHERE Contact_ID = ?"; }
 }

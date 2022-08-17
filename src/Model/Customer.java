@@ -10,12 +10,12 @@ public class Customer {
     private String divisionName;
 
     public Customer (int id, String name, String address, String postal, String phone, String divisionName){
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.postal = postal;
-        this.phone = phone;
-        this.divisionName = divisionName;
+        setId(id);
+        setName(name);
+        setAddress(address);
+        setPostal(postal);
+        setPhone(phone);
+        setDivisionName(divisionName);
     }
 
     public int getId() {

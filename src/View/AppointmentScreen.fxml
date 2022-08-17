@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controller.AppointmentScreen">
-    <Label layoutX="375.0" layoutY="14.0" text="Appointment Screen"/>
-    <Button fx:id="selectButton" layoutX="402.0" layoutY="483.0" mnemonicParsing="false" onAction="#selectButtonHandler"
-            text="Select"/>
-    <TableView layoutX="26.0" layoutY="58.0" prefHeight="402.0" prefWidth="847.0">
+<AnchorPane prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AppointmentScreen">
+    <Label layoutX="495.0" layoutY="14.0" text="Appointment Screen" />
+    <Button fx:id="selectButton" layoutX="526.0" layoutY="556.0" mnemonicParsing="false" onAction="#selectButtonHandler" text="Select" />
+    <TableView fx:id="appointmentTable" layoutX="26.0" layoutY="120.0" prefHeight="402.0" prefWidth="1048.0">
       <columns>
-          <TableColumn prefWidth="107.0" text="Appointment_ID"/>
-          <TableColumn prefWidth="82.0" text="Title"/>
-          <TableColumn prefWidth="111.0" text="Description"/>
-          <TableColumn minWidth="0.0" prefWidth="77.0" text="Location"/>
-          <TableColumn prefWidth="57.0" text="Contact"/>
-          <TableColumn prefWidth="42.0" text="Type"/>
-          <TableColumn prefWidth="119.0" text="Start Date and Time"/>
-          <TableColumn prefWidth="112.0" text="End Date and Time"/>
-          <TableColumn prefWidth="87.0" text="Customer_ID"/>
-          <TableColumn prefWidth="52.0" text="User_ID"/>
+          <TableColumn fx:id="appointmentID" prefWidth="107.0" text="Appointment_ID" />
+          <TableColumn fx:id="appointmentTitle" prefWidth="82.0" text="Title" />
+          <TableColumn fx:id="appointmentDesc" prefWidth="111.0" text="Description" />
+          <TableColumn fx:id="appointmentLocation" minWidth="0.0" prefWidth="77.0" text="Location" />
+          <TableColumn fx:id="appointmentContact" prefWidth="127.20001220703125" text="Contact" />
+          <TableColumn fx:id="appointmentType" minWidth="5.39996337890625" prefWidth="90.39996337890625" text="Type" />
+          <TableColumn fx:id="appointmentStart" prefWidth="172.20001220703125" text="Start Date and Time" />
+          <TableColumn fx:id="appointmentEnd" prefWidth="144.60003662109375" text="End Date and Time" />
+          <TableColumn fx:id="appointmentCustomerID" prefWidth="80.5999755859375" text="Customer_ID" />
+          <TableColumn fx:id="appointmentUserID" prefWidth="57.00006103515625" text="User_ID" />
       </columns>
     </TableView>
 </AnchorPane>

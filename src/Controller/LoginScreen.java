@@ -1,9 +1,7 @@
 package Controller;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.ZoneId;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -26,21 +24,21 @@ public class LoginScreen implements Initializable {
     public Label welcomeLabel;
     public Label userLabel;
     public Label zoneLabel;
-    private ZoneId z = ZoneId.systemDefault();
+    private final ZoneId z = ZoneId.systemDefault();
 
-    public void userNameTextHandler(ActionEvent actionEvent) {
+    public void userNameTextHandler() {
     }
 
-    public void passwordTextHandler(ActionEvent actionEvent) {
+    public void passwordTextHandler() {
     }
 
-    public void loginButtonHandler(ActionEvent actionEvent) {
+    public void loginButtonHandler() {
         Parent root;
         try {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AppointmentScreen.fxml")));
             Stage appStage = new Stage();
             appStage.setTitle("Appointment Screen");
-            appStage.setScene(new Scene(root, 900, 600));
+            appStage.setScene(new Scene(root));
             appStage.show();
         } catch (IOException ioe){
             ioe.printStackTrace();
