@@ -2,10 +2,14 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="700.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AppointmentScreen">
-    <Label layoutX="495.0" layoutY="14.0" text="Appointment Screen" />
-    <Button fx:id="selectButton" layoutX="526.0" layoutY="556.0" mnemonicParsing="false" onAction="#selectButtonHandler" text="Select" />
+    <Label layoutX="495.0" layoutY="14.0" text="Appointment Screen" textFill="#265fad">
+      <font>
+         <Font size="18.0" />
+      </font></Label>
+    <Button fx:id="customerListButton" layoutX="26.0" layoutY="50.0" mnemonicParsing="false" onAction="#customerListButtonHandler" text="Customer List" />
     <TableView fx:id="appointmentTable" layoutX="26.0" layoutY="120.0" prefHeight="402.0" prefWidth="1048.0">
       <columns>
           <TableColumn fx:id="appointmentID" prefWidth="107.0" text="Appointment_ID" />
@@ -20,4 +24,5 @@
           <TableColumn fx:id="appointmentUserID" prefWidth="57.00006103515625" text="User_ID" />
       </columns>
     </TableView>
+   <Button fx:id="addAppointment" layoutX="382.0" layoutY="568.0" mnemonicParsing="false" onAction="#addAppointmentHandler" prefWidth="50.0" text="Add" />
 </AnchorPane>

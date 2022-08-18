@@ -1,4 +1,4 @@
-package DAO;
+package Helper;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +27,7 @@ public class DBConnection {
             Class.forName(mySQLJBDCDriver);
             conn = DriverManager.getConnection(jdbcURL, userName, password);
 
-            System.out.println("Connection to DAO Successful.");
+            System.out.println("Connection to Database Successful.");
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (ClassNotFoundException c){

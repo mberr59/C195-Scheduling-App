@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="730.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerScreen">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerScreen">
     <Label layoutX="320.0" layoutY="67.0" text="Customer Screen" />
     <TableView fx:id="customerTable" layoutX="21.0" layoutY="115.0" prefHeight="200.0" prefWidth="688.0">
       <columns>
@@ -16,7 +16,7 @@
       </columns>
     </TableView>
     <Button fx:id="addCustomerButton" layoutX="262.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#addButtonHandler" prefWidth="55.0" text="Add" />
-    <Button fx:id="modifyCustomerButton" layoutX="335.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#modifyButtonHandler" prefWidth="55.0" text="Modify" />
+    <Button fx:id="modifyCustomerButton" layoutX="335.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#modifyButtonHandler" prefWidth="55.0" text="Update" />
     <Button fx:id="exitCustomerButton" layoutX="480.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exitButtonHandler" prefWidth="55.0" text="Exit" />
     <Button fx:id="deleteCustomerButton" layoutX="406.0" layoutY="337.0" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#deleteButtonHandler" prefWidth="55.0" text="Delete" />
     <Button fx:id="refreshDataButton" layoutX="535.0" layoutY="41.0" mnemonicParsing="false" onAction="#refreshDataHandler" text="Refresh" />

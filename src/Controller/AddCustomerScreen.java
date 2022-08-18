@@ -1,7 +1,7 @@
 package Controller;
 
-import DAO.QueryExecutions;
-import DAO.DBConnection;
+import Helper.QueryExecutions;
+import Helper.DBConnection;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

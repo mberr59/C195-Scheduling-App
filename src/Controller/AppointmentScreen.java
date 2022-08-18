@@ -1,7 +1,7 @@
 package Controller;
 
-import DAO.DBConnection;
-import DAO.QueryExecutions;
+import Helper.DBConnection;
+import Helper.QueryExecutions;
 import Model.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AppointmentScreen implements Initializable {
-    public Button selectButton;
     public TableView<Appointment> appointmentTable;
     public TableColumn<Appointment, Integer> appointmentID;
     public TableColumn<Appointment, String> appointmentTitle;
@@ -34,11 +33,13 @@ public class AppointmentScreen implements Initializable {
     public TableColumn<Appointment, Date> appointmentEnd;
     public TableColumn<Appointment, Integer> appointmentCustomerID;
     public TableColumn<Appointment, Integer> appointmentUserID;
+    public Button addAppointment;
+    public Button customerListButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { populateAppointments(); }
 
-    public void selectButtonHandler() {
+    public void customerListButtonHandler() {
         Parent root;
         try {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/CustomerScreen.fxml")));
@@ -95,6 +96,19 @@ public class AppointmentScreen implements Initializable {
             appointmentTable.setItems(appointmentData);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
+        }
+    }
+
+    public void addAppointmentHandler() {
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AddAppointmentScreen.fxml")));
+            Stage appStage = new Stage();
+            appStage.setTitle("Add Appointment");
+            appStage.setScene(new Scene(root));
+            appStage.show();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
         }
     }
 }
