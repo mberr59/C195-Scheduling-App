@@ -23,7 +23,7 @@ public class AddCustomerScreen {
     public Button AddCustCancelBn;
 
 
-    public void AddCustSaveHandler() { addingCustomerData(); }
+    public void AddCustSaveHandler() { savingCustomerData(); }
 
     public void AddCustCancelHandler() {
         Stage stage = (Stage) AddCustCancelBn.getScene().getWindow();
@@ -80,7 +80,7 @@ public class AddCustomerScreen {
         PopulateStateCB();
     }
 
-    public void addingCustomerData() {
+    public void savingCustomerData() {
         Connection conn = DBConnection.getConn();
         String custName = AddCustNameTF.getText();
         String custPhone = AddCustPhoneTF.getText();

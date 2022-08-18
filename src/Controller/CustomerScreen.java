@@ -9,10 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -125,6 +122,40 @@ public class CustomerScreen implements Initializable {
     }
 
     public void deleteButtonHandler() {
+        try {
+            int customerID = customerTable.getSelectionModel().getSelectedItem().getId();
+            String customerName = customerTable.getSelectionModel().getSelectedItem().getName();
+            Connection connection = DBConnection.getConn();
+            PreparedStatement appointmentStatement = connection.prepareStatement(QueryExecutions.getAppointmentByCustomer());
+            appointmentStatement.setInt(1, customerID);
+            ResultSet appointmentRS =  appointmentStatement.executeQuery();
+            if (!appointmentRS.next()) {
+                Alert deleteCustomerAlert = new Alert(Alert.AlertType.CONFIRMATION,"Delete This Customer?",ButtonType.YES, ButtonType.NO);
+                deleteCustomerAlert.setContentText("Are you sure you wish to delete " + customerName + "?");
+                deleteCustomerAlert.showAndWait();
+                if (deleteCustomerAlert.getResult() == ButtonType.YES) {
+                    PreparedStatement deleteCustomer = connection.prepareStatement(QueryExecutions.deleteCustomer());
+                    deleteCustomer.setInt(1, customerID);
+                    int updatedRows = deleteCustomer.executeUpdate();
+                    Alert deleteInfo = new Alert(Alert.AlertType.INFORMATION);
+                    if (updatedRows > 0) {
+                        deleteInfo.setTitle("Customer Deleted");
+                        deleteInfo.setContentText(customerName + " has been deleted.");
+                    } else {
+                        deleteInfo.setTitle("Customer Not Deleted");
+                        deleteInfo.setContentText(customerName + " has not been deleted.");
+                    }
+                    deleteInfo.showAndWait();
+                }
+            } else {
+                Alert appointmentWarning = new Alert(Alert.AlertType.ERROR);
+                appointmentWarning.setTitle("Customer Appointments");
+                appointmentWarning.setContentText("Customer still has appointments scheduled.");
+                appointmentWarning.showAndWait();
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
 
     public void refreshDataHandler() {

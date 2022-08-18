@@ -4,22 +4,16 @@ package DAO;
 public abstract class QueryExecutions {
 
     //Sql SELECT query for the customers table
-    public static String getSelectCustomerQuery(){
-        return "SELECT * FROM customers";
-    }
+    public static String getSelectCustomerQuery(){ return "SELECT * FROM customers"; }
 
     //Sql SELECT query for the appointments table
-    public static String getSelectAppointmentQuery(){
-        return "SELECT * FROM appointments";
-    }
+    public static String getSelectAppointmentQuery(){ return "SELECT * FROM appointments"; }
 
-    public static String getCountriesQuery(){
-        return "SELECT Country FROM countries";
-    }
+    public static String getAppointmentByCustomer() { return "SELECT * FROM appointments WHERE Customer_ID = ?"; }
 
-    public static String getCountriesIDQuery(){
-        return "SELECT Country_ID FROM countries WHERE Country = ?";
-    }
+    public static String getCountriesQuery() { return "SELECT Country FROM countries"; }
+
+    public static String getCountriesIDQuery(){ return "SELECT Country_ID FROM countries WHERE Country = ?"; }
 
     public static String getCountriesName() { return "SELECT Country FROM countries WHERE Country_ID = ?"; }
 
@@ -43,4 +37,6 @@ public abstract class QueryExecutions {
     }
 
     public static String getContactsQuery() { return "SELECT Contact_Name FROM contacts WHERE Contact_ID = ?"; }
+
+    public static String deleteCustomer() { return "DELETE FROM customers WHERE Customer_ID = ?";}
 }
