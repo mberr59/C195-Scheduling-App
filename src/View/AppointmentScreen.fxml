@@ -25,4 +25,5 @@
       </columns>
     </TableView>
    <Button fx:id="addAppointment" layoutX="382.0" layoutY="568.0" mnemonicParsing="false" onAction="#addAppointmentHandler" prefWidth="50.0" text="Add" />
+   <Button fx:id="refreshTableButton" layoutX="884.0" layoutY="38.0" mnemonicParsing="false" onAction="#refreshTableHandler" text="Refresh" />
 </AnchorPane>

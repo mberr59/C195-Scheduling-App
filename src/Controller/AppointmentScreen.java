@@ -35,6 +35,7 @@ public class AppointmentScreen implements Initializable {
     public TableColumn<Appointment, Integer> appointmentUserID;
     public Button addAppointment;
     public Button customerListButton;
+    public Button refreshTableButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { populateAppointments(); }
@@ -111,4 +112,6 @@ public class AppointmentScreen implements Initializable {
             ioe.printStackTrace();
         }
     }
+
+    public void refreshTableHandler() { populateAppointments();}
 }

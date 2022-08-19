@@ -32,8 +32,6 @@
    <Label layoutX="50.0" layoutY="436.0" text="User ID" />
    <TextField fx:id="addAppCustomerID" layoutX="163.0" layoutY="400.0" promptText="Enter Customer ID" />
    <TextField fx:id="addAppUserID" layoutX="163.0" layoutY="432.0" promptText="Enter User ID" />
-   <TextField fx:id="addAppTimeStart" layoutX="348.0" layoutY="325.0" promptText="Enter Time" />
-   <TextField fx:id="addAppTimeEnd" layoutX="348.0" layoutY="362.0" promptText="Enter Time" />
-   <ChoiceBox fx:id="addAppAMPMStart" layoutX="507.0" layoutY="325.0" prefHeight="26.0" prefWidth="50.0" />
-   <ChoiceBox fx:id="addAppAMPMEnd" layoutX="507.0" layoutY="361.0" prefHeight="26.0" prefWidth="50.0" />
+   <ComboBox fx:id="addAppStartTime" layoutX="348.0" layoutY="325.0" prefWidth="150.0" promptText="Select Time" />
+   <ComboBox fx:id="addAppEndTime" layoutX="348.0" layoutY="362.0" prefWidth="150.0" promptText="Select Time" />
 </AnchorPane>

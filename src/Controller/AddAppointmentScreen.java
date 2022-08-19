@@ -10,8 +10,10 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AddAppointmentScreen implements Initializable {
@@ -26,13 +28,11 @@ public class AddAppointmentScreen implements Initializable {
     public Button addAppCancel;
     public DatePicker addAppDateStart;
     public DatePicker addAppDateEnd;
-    public TextField addAppTimeStart;
-    public TextField addAppTimeEnd;
-    public ChoiceBox<String> addAppAMPMStart;
-    public ChoiceBox<String> addAppAMPMEnd;
+    public ComboBox<LocalTime> addAppStartTime;
+    public ComboBox<LocalTime> addAppEndTime;
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { populateComboboxes(); }
+    public void initialize(URL url, ResourceBundle resourceBundle) { populateData(); }
 
     public void addAppSaveHandler() {
         Connection conn = DBConnection.getConn();
@@ -41,14 +41,12 @@ public class AddAppointmentScreen implements Initializable {
         String appLocation = addAppLocation.getText();
         String appContact = addAppContact.getSelectionModel().getSelectedItem();
         String appType = addAppType.getText();
-        String appStartDate = addAppDateStart.getValue().toString();
-        String appStartTime = addAppTimeStart.getText() + " ";
-        String appStartAMPM = addAppAMPMStart.getValue();
-        String appEndDate = addAppDateEnd.getValue().toString();
-        String appEndTime = addAppTimeEnd.getText() + " ";
-        String appEndAMPM = addAppAMPMEnd.getValue();
-        Timestamp appAddStartTimestamp = setDateTimeFormat(appStartDate, appStartTime, appStartAMPM);
-        Timestamp appAddEndTimestamp = setDateTimeFormat(appEndDate, appEndTime, appEndAMPM);
+        LocalDate appStartDate = addAppDateStart.getValue();
+        LocalTime appStartTime = addAppStartTime.getSelectionModel().getSelectedItem();
+        LocalDate appEndDate = addAppDateEnd.getValue();
+        LocalTime appEndTime = addAppEndTime.getSelectionModel().getSelectedItem();
+        Timestamp appAddStartTimestamp = setDateTimeFormat(appStartDate, appStartTime);
+        Timestamp appAddEndTimestamp = setDateTimeFormat(appEndDate, appEndTime);
         int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
         int appAddUserID = Integer.parseInt(addAppUserID.getText());
         try {
@@ -84,27 +82,32 @@ public class AddAppointmentScreen implements Initializable {
         stage.close();
     }
 
-    public Timestamp setDateTimeFormat(String date, String time, String timeOfDay) {
-        try{
-            SimpleDateFormat sdfForTimestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat sdf12HourFormat = new SimpleDateFormat("HH:mm a");
-            SimpleDateFormat sdf24HourFormat = new SimpleDateFormat("HH:mm");
-            String convertTo12 = sdf12HourFormat.parse(time);
-            return (Timestamp) sdfForTimestamp.parse(newTime);
-
-        }catch (ParseException pe) {
-            pe.printStackTrace();
-            return null;
-        }
+    public Timestamp setDateTimeFormat(LocalDate date, LocalTime time) {
+            DateTimeFormatter sdfForTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime formattedDateTime = LocalDateTime.of(date, time);
+            return Timestamp.valueOf(formattedDateTime.format(sdfForTimestamp));
     }
 
-    public void populateComboboxes() {
-        ObservableList<String> addAppAMPMList = FXCollections.observableArrayList("AM", "PM");
+    public void populateData() {
         ObservableList<String> addAppContactList = FXCollections.observableArrayList();
-        addAppAMPMStart.setItems(addAppAMPMList);
-        addAppAMPMStart.getSelectionModel().selectFirst();
-        addAppAMPMEnd.setItems(addAppAMPMList);
-        addAppAMPMEnd.getSelectionModel().selectFirst();
+        ObservableList<LocalTime> addAppTimeList = FXCollections.observableArrayList();
+        LocalTime time = LocalTime.of(0,0);
+        addAppTimeList.add(time);
+        int n = 0;
+        do {
+            time = time.plusMinutes(15);
+            addAppTimeList.add(time);
+            if (time.getMinute() == 45) {
+                if (time.getHour() == 23) {
+                    break;
+                }
+                time = time.plusHours(1);
+                time = time.minusMinutes(45);
+                addAppTimeList.add(time);
+                n += 1;
+            }
+        } while (n < 24);
+
         try {
             Connection connection = DBConnection.getConn();
             PreparedStatement contactNames = connection.prepareStatement(QueryExecutions.getContactsName());
@@ -117,5 +120,7 @@ public class AddAppointmentScreen implements Initializable {
             sqlException.printStackTrace();
         }
         addAppContact.setItems(addAppContactList);
+        addAppStartTime.setItems(addAppTimeList);
+        addAppEndTime.setItems(addAppTimeList);
     }
 }
