@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="553.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ModifyAppointmentScreen">
+<Label layoutX="228.0" layoutY="21.0" text="Add Appointment" textFill="#265fad">
+    <font>
+        <Font size="18.0" />
+    </font>
+</Label>
+<Label layoutX="50.0" layoutY="87.0" text="Appointment ID" />
+<TextField disable="true" editable="false" layoutX="163.0" layoutY="83.0" text="Auto-Generated" />
+<Label layoutX="50.0" layoutY="126.0" text="Title" />
+<TextField fx:id="modAppTitle" layoutX="163.0" layoutY="122.0" promptText="Enter Title" />
+<Button fx:id="modAppSave" layoutX="216.0" layoutY="492.0" mnemonicParsing="false" onAction="#modAppSaveHandler" prefWidth="51.2" text="Save" />
+<Button fx:id="modAppCancel" layoutX="320.0" layoutY="492.0" mnemonicParsing="false" onAction="#modAppCancelHandler" text="Cancel" />
+<Label layoutX="50.0" layoutY="164.0" text="Description" />
+<Label layoutX="50.0" layoutY="200.0" text="Location" />
+<TextField fx:id="modAppDesc" layoutX="163.0" layoutY="160.0" promptText="Enter Description" />
+<TextField fx:id="modAppLocation" layoutX="163.0" layoutY="196.0" promptText="Enter Location" />
+<Label layoutX="50.0" layoutY="241.0" text="Contact" />
+<ComboBox fx:id="modAppContact" layoutX="163.0" layoutY="237.0" prefWidth="150.0" promptText="Select a Contact" />
+<Label layoutX="50.0" layoutY="286.0" text="Type" />
+<TextField fx:id="modAppType" layoutX="163.0" layoutY="282.0" promptText="Enter Type" />
+<DatePicker fx:id="modAppDateStart" layoutX="163.0" layoutY="325.0" promptText="Select Date" />
+<Label layoutX="50.0" layoutY="329.0" text="Start Date/Time" />
+<DatePicker fx:id="modAppDateEnd" layoutX="163.0" layoutY="362.0" promptText="Select Date" />
+<Label layoutX="50.0" layoutY="366.0" text="End Date/Time" />
+<Label layoutX="50.0" layoutY="404.0" text="Customer ID" />
+<Label layoutX="50.0" layoutY="436.0" text="User ID" />
+<TextField fx:id="modAppCustomerID" layoutX="163.0" layoutY="400.0" promptText="Enter Customer ID" />
+<TextField fx:id="modAppUserID" layoutX="163.0" layoutY="432.0" promptText="Enter User ID" />
+<ComboBox fx:id="modAppStartTime" layoutX="348.0" layoutY="325.0" prefWidth="150.0" promptText="Select Time" />
+<ComboBox fx:id="modAppEndTime" layoutX="348.0" layoutY="362.0" prefWidth="150.0" promptText="Select Time" />
+</AnchorPane>

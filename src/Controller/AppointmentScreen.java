@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -36,6 +37,7 @@ public class AppointmentScreen implements Initializable {
     public Button addAppointment;
     public Button customerListButton;
     public Button refreshTableButton;
+    public Button modAppointment;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { populateAppointments(); }
@@ -114,4 +116,25 @@ public class AppointmentScreen implements Initializable {
     }
 
     public void refreshTableHandler() { populateAppointments();}
+
+    public void modAppointmentHandler() {
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/ModifyAppointmentScreen.fxml")));
+            Parent root = loader.load();
+
+            ModifyAppointmentScreen modApp = loader.getController();
+            modApp.populateAppFields(appointmentTable.getSelectionModel().getSelectedItem());
+            Stage appStage = new Stage();
+            appStage.setTitle("Modify Appointment Screen");
+            appStage.setScene(new Scene(root));
+            appStage.show();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (NullPointerException npe) {
+            Alert selectionAlert = new Alert(Alert.AlertType.ERROR);
+            selectionAlert.setTitle("Selection Error");
+            selectionAlert.setContentText("Please select an Appointment to modify.");
+            selectionAlert.showAndWait();
+        }
+    }
 }

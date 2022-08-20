@@ -10,9 +10,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
@@ -45,35 +43,41 @@ public class AddAppointmentScreen implements Initializable {
         LocalTime appStartTime = addAppStartTime.getSelectionModel().getSelectedItem();
         LocalDate appEndDate = addAppDateEnd.getValue();
         LocalTime appEndTime = addAppEndTime.getSelectionModel().getSelectedItem();
-        Timestamp appAddStartTimestamp = setDateTimeFormat(appStartDate, appStartTime);
-        Timestamp appAddEndTimestamp = setDateTimeFormat(appEndDate, appEndTime);
-        int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
-        int appAddUserID = Integer.parseInt(addAppUserID.getText());
-        try {
-            PreparedStatement contactStatement = conn.prepareStatement(QueryExecutions.getContactID());
-            contactStatement.setString(1, appContact);
-            ResultSet contactRS = contactStatement.executeQuery();
-            contactRS.next();
-            int contactID = contactRS.getInt("Contact_ID");
-            PreparedStatement addAppointmentData = conn.prepareStatement(QueryExecutions.addAppointmentQuery());
-            addAppointmentData.setString(1, appTitle);
-            addAppointmentData.setString(2, appDesc);
-            addAppointmentData.setString(3, appLocation);
-            addAppointmentData.setString(4, appType);
-            addAppointmentData.setTimestamp(5, appAddStartTimestamp);
-            addAppointmentData.setTimestamp(6, appAddEndTimestamp);
-            addAppointmentData.setInt(7, appAddCustomerID);
-            addAppointmentData.setInt(8, appAddUserID);
-            addAppointmentData.setInt(9, contactID);
-            int updatedRows = addAppointmentData.executeUpdate();
-            if (updatedRows > 0) {
-                System.out.println("Appointment Insert Successful");
-            } else {
-                System.out.println("Appointment Insert Unsuccessful");
-            }
+        Instant appStartDateTime = setDateTimeFormat(appStartDate, appStartTime).toInstant();
+        Instant appEndDateTime = setDateTimeFormat(appEndDate, appEndTime).toInstant();
+        if (validateDateTime(appStartDateTime)) {
+            if (validateDateTime(appEndDateTime)) {
+                Timestamp appAddStartTimestamp = setDateTimeFormat(appStartDate, appStartTime);
+                Timestamp appAddEndTimestamp = setDateTimeFormat(appEndDate, appEndTime);
+                int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
+                int appAddUserID = Integer.parseInt(addAppUserID.getText());
+                try {
+                    PreparedStatement contactStatement = conn.prepareStatement(QueryExecutions.getContactID());
+                    contactStatement.setString(1, appContact);
+                    ResultSet contactRS = contactStatement.executeQuery();
+                    contactRS.next();
+                    int contactID = contactRS.getInt("Contact_ID");
+                    PreparedStatement addAppointmentData = conn.prepareStatement(QueryExecutions.addAppointmentQuery());
+                    addAppointmentData.setString(1, appTitle);
+                    addAppointmentData.setString(2, appDesc);
+                    addAppointmentData.setString(3, appLocation);
+                    addAppointmentData.setString(4, appType);
+                    addAppointmentData.setTimestamp(5, appAddStartTimestamp);
+                    addAppointmentData.setTimestamp(6, appAddEndTimestamp);
+                    addAppointmentData.setInt(7, appAddCustomerID);
+                    addAppointmentData.setInt(8, appAddUserID);
+                    addAppointmentData.setInt(9, contactID);
+                    int updatedRows = addAppointmentData.executeUpdate();
+                    if (updatedRows > 0) {
+                        System.out.println("Appointment Insert Successful");
+                    } else {
+                        System.out.println("Appointment Insert Unsuccessful");
+                    }
 
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+                } catch (SQLException sqlException) {
+                    sqlException.printStackTrace();
+                }
+            }
         }
     }
 
@@ -86,6 +90,23 @@ public class AddAppointmentScreen implements Initializable {
             DateTimeFormatter sdfForTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime formattedDateTime = LocalDateTime.of(date, time);
             return Timestamp.valueOf(formattedDateTime.format(sdfForTimestamp));
+    }
+
+    public boolean validateDateTime(Instant instant) {
+        ZonedDateTime eastTime = instant.atZone(ZoneId.of("America/New_York"));
+        if (eastTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) || eastTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            Alert dayAlert = new Alert(Alert.AlertType.ERROR);
+            dayAlert.setTitle("Invalid Day");
+            dayAlert.setContentText("Please enter a valid workday (Mon-Fri).");
+            dayAlert.showAndWait();
+            return false;
+        } else if ((eastTime.getHour() < 8) || (eastTime.getHour() > 22)) {
+            Alert timeAlert = new Alert(Alert.AlertType.ERROR);
+            timeAlert.setTitle("Invalid Time");
+            timeAlert.setContentText("Please enter a valid time between 8am and 10pm EST.");
+            timeAlert.showAndWait();
+            return false;
+        } else { return true; }
     }
 
     public void populateData() {
