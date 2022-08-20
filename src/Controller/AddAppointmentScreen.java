@@ -24,8 +24,8 @@ public class AddAppointmentScreen implements Initializable {
     public TextField addAppUserID;
     public Button addAppSave;
     public Button addAppCancel;
-    public DatePicker addAppDateStart;
-    public DatePicker addAppDateEnd;
+    public DatePicker addAppStartDate;
+    public DatePicker addAppEndDate;
     public ComboBox<LocalTime> addAppStartTime;
     public ComboBox<LocalTime> addAppEndTime;
 
@@ -39,9 +39,9 @@ public class AddAppointmentScreen implements Initializable {
         String appLocation = addAppLocation.getText();
         String appContact = addAppContact.getSelectionModel().getSelectedItem();
         String appType = addAppType.getText();
-        LocalDate appStartDate = addAppDateStart.getValue();
+        LocalDate appStartDate = addAppStartDate.getValue();
         LocalTime appStartTime = addAppStartTime.getSelectionModel().getSelectedItem();
-        LocalDate appEndDate = addAppDateEnd.getValue();
+        LocalDate appEndDate = addAppEndDate.getValue();
         LocalTime appEndTime = addAppEndTime.getSelectionModel().getSelectedItem();
         Instant appStartDateTime = setDateTimeFormat(appStartDate, appStartTime).toInstant();
         Instant appEndDateTime = setDateTimeFormat(appEndDate, appEndTime).toInstant();

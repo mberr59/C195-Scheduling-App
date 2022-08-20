@@ -24,7 +24,7 @@
    <ComboBox fx:id="addAppContact" layoutX="163.0" layoutY="237.0" prefWidth="150.0" promptText="Select a Contact" />
    <Label layoutX="50.0" layoutY="286.0" text="Type" />
    <TextField fx:id="addAppType" layoutX="163.0" layoutY="282.0" promptText="Enter Type" />
-   <DatePicker fx:id="addAppDateStart" layoutX="163.0" layoutY="325.0" promptText="Select Date" />
+   <DatePicker fx:id="addAppStartDate" layoutX="163.0" layoutY="325.0" promptText="Select Date" />
    <Label layoutX="50.0" layoutY="329.0" text="Start Date/Time" />
    <DatePicker fx:id="addAppDateEnd" layoutX="163.0" layoutY="362.0" promptText="Select Date" />
    <Label layoutX="50.0" layoutY="366.0" text="End Date/Time" />
