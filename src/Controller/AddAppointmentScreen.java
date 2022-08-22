@@ -28,6 +28,8 @@ public class AddAppointmentScreen implements Initializable {
     public ComboBox<LocalTime> addAppStartTime;
     public ComboBox<LocalTime> addAppEndTime;
 
+    // Lambda expression 3. Creates a ConvertDateTime Interface. A timestamp object is passed to the method and then
+    // is converted to EST. The converted timestamp is then returned.
     ConvertDateTime timestampConversion = (timestamp) -> {
         LocalDateTime localDT = timestamp.toLocalDateTime();
         ZonedDateTime zonedDT = localDT.atZone(ZoneId.systemDefault());

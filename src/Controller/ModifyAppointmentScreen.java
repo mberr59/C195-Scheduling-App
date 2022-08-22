@@ -31,6 +31,7 @@ public class ModifyAppointmentScreen {
     public ComboBox<LocalTime> modAppEndTime;
     public TextField modAppID;
 
+    // Lambda expression 4. Creates a PopulateData Interface. Populates the contant and time combo boxes with data.
     PopulateData modAppData = () -> {
         ObservableList<String> modAppContactList = FXCollections.observableArrayList();
         ObservableList<LocalTime> addAppTimeList = FXCollections.observableArrayList();
