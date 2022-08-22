@@ -1,6 +1,7 @@
 package Controller;
 
 import Helper.DBConnection;
+import Helper.PopulateData;
 import Helper.QueryExecutions;
 import Model.Customer;
 import javafx.collections.FXCollections;
@@ -33,9 +34,49 @@ public class CustomerScreen implements Initializable {
     public Button deleteCustomerButton;
     public Button refreshDataButton;
 
+    // Lambda Expression 3. Creates a PopulateData Interface named customerData and passes the data to the Interface
+    // using a Lambda expression block.
+    PopulateData customerData = () -> {
+        try {
+            ObservableList<Customer> customerData = FXCollections.observableArrayList();
+            Connection conn = DBConnection.getConn();
+            String query = QueryExecutions.getSelectCustomerQuery();
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+
+                int id = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String postal = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                int divisionID = rs.getInt("Division_ID");
+                PreparedStatement divisionNameStatement = conn.prepareStatement(QueryExecutions.getDivisionName());
+                divisionNameStatement.setInt(1, divisionID);
+                ResultSet divisionNameRS = divisionNameStatement.executeQuery();
+                divisionNameRS.next();
+                String divisionName = divisionNameRS.getString("Division");
+
+                Customer customer = new Customer(id, name, address, postal, phone, divisionName);
+                customerData.add(customer);
+
+            }
+            customerTableId.setCellValueFactory(new PropertyValueFactory<>("id"));
+            customerTableName.setCellValueFactory(new PropertyValueFactory<>("name"));
+            customerTableAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+            customerTablePostal.setCellValueFactory(new PropertyValueFactory<>("postal"));
+            customerTablePhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            customerTableFLD.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
+            customerTable.setItems(customerData);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+    };
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        populateCustomerTable();
+        customerData.poplateData();
     }
 
     public void addButtonHandler() {
@@ -83,44 +124,6 @@ public class CustomerScreen implements Initializable {
         stage.close();
     }
 
-    public void populateCustomerTable(){
-        try {
-            ObservableList<Customer> customerData = FXCollections.observableArrayList();
-            Connection conn = DBConnection.getConn();
-            String query = QueryExecutions.getSelectCustomerQuery();
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
-
-            while (rs.next()) {
-
-                int id = rs.getInt("Customer_ID");
-                String name = rs.getString("Customer_Name");
-                String address = rs.getString("Address");
-                String postal = rs.getString("Postal_Code");
-                String phone = rs.getString("Phone");
-                int divisionID = rs.getInt("Division_ID");
-                PreparedStatement divisionNameStatement = conn.prepareStatement(QueryExecutions.getDivisionName());
-                divisionNameStatement.setInt(1, divisionID);
-                ResultSet divisionNameRS = divisionNameStatement.executeQuery();
-                divisionNameRS.next();
-                String divisionName = divisionNameRS.getString("Division");
-
-                Customer customer = new Customer(id, name, address, postal, phone, divisionName);
-                customerData.add(customer);
-
-            }
-            customerTableId.setCellValueFactory(new PropertyValueFactory<>("id"));
-            customerTableName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            customerTableAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-            customerTablePostal.setCellValueFactory(new PropertyValueFactory<>("postal"));
-            customerTablePhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
-            customerTableFLD.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
-            customerTable.setItems(customerData);
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-    }
-
     public void deleteButtonHandler() {
         try {
             int customerID = customerTable.getSelectionModel().getSelectedItem().getId();
@@ -159,6 +162,6 @@ public class CustomerScreen implements Initializable {
     }
 
     public void refreshDataHandler() {
-        populateCustomerTable();
+        customerData.poplateData();
     }
 }

@@ -2,9 +2,13 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.CustomerScreen">
-    <Label layoutX="320.0" layoutY="67.0" text="Customer Screen" />
+    <Label layoutX="297.0" layoutY="27.0" text="Customer Screen" textFill="#265fad">
+      <font>
+         <Font size="18.0" />
+      </font></Label>
     <TableView fx:id="customerTable" layoutX="21.0" layoutY="115.0" prefHeight="200.0" prefWidth="688.0">
       <columns>
           <TableColumn fx:id="customerTableId" prefWidth="50.0" text="ID" />

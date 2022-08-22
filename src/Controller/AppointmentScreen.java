@@ -1,6 +1,7 @@
 package Controller;
 
 import Helper.DBConnection;
+import Helper.PopulateData;
 import Helper.QueryExecutions;
 import Model.Appointment;
 import javafx.collections.FXCollections;
@@ -39,23 +40,9 @@ public class AppointmentScreen implements Initializable {
     public Button refreshTableButton;
     public Button modAppointment;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { populateAppointments(); }
-
-    public void customerListButtonHandler() {
-        Parent root;
-        try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/CustomerScreen.fxml")));
-            Stage appStage = new Stage();
-            appStage.setTitle("Customer Screen");
-            appStage.setScene(new Scene(root));
-            appStage.show();
-        } catch (IOException ioe){
-            ioe.printStackTrace();
-        }
-    }
-
-    public void populateAppointments() {
+    // Lambda Expression 2. Creates a PopulateData Interface and passes the appointment data to the Interface using
+    // a Lambda Expression block.
+    PopulateData appointmentData = () -> {
         try {
             ObservableList<Appointment> appointmentData = FXCollections.observableArrayList();
             Connection conn = DBConnection.getConn();
@@ -80,7 +67,6 @@ public class AppointmentScreen implements Initializable {
                 ResultSet contactRS = contactStatement.executeQuery();
                 contactRS.next();
                 String contactName = contactRS.getString("Contact_Name");
-
                 Appointment appointment = new Appointment(appointmentID, title, description, location, contactName,
                         type, startDateTime, endDateTime, customerID, userID, contactID);
                 appointmentData.add(appointment);
@@ -100,6 +86,22 @@ public class AppointmentScreen implements Initializable {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
+    };
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) { appointmentData.poplateData(); }
+
+    public void customerListButtonHandler() {
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/CustomerScreen.fxml")));
+            Stage appStage = new Stage();
+            appStage.setTitle("Customer Screen");
+            appStage.setScene(new Scene(root));
+            appStage.show();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
     }
 
     public void addAppointmentHandler() {
@@ -115,7 +117,7 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
-    public void refreshTableHandler() { populateAppointments();}
+    public void refreshTableHandler() { appointmentData.poplateData();}
 
     public void modAppointmentHandler() {
         try {

@@ -1,6 +1,8 @@
 package Controller;
 
 import Helper.DBConnection;
+import Helper.PopulateData;
+import Helper.ValidateDateTime;
 import Helper.QueryExecutions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,8 +31,46 @@ public class AddAppointmentScreen implements Initializable {
     public ComboBox<LocalTime> addAppStartTime;
     public ComboBox<LocalTime> addAppEndTime;
 
+    PopulateData addAppData = () -> {
+        ObservableList<String> addAppContactList = FXCollections.observableArrayList();
+        ObservableList<LocalTime> addAppTimeList = FXCollections.observableArrayList();
+        LocalTime time = LocalTime.of(0,0);
+            addAppTimeList.add(time);
+        int n = 0;
+            do {
+            time = time.plusMinutes(15);
+            addAppTimeList.add(time);
+            if (time.getMinute() == 45) {
+                if (time.getHour() == 23) {
+                    break;
+                }
+                time = time.plusHours(1);
+                time = time.minusMinutes(45);
+                addAppTimeList.add(time);
+                n += 1;
+            }
+        } while (n < 24);
+
+            try {
+            Connection connection = DBConnection.getConn();
+            PreparedStatement contactNames = connection.prepareStatement(QueryExecutions.getContactsName());
+            ResultSet contactRS = contactNames.executeQuery();
+            while (contactRS.next()) {
+                String result = contactRS.getString("Contact_Name");
+                addAppContactList.add(result);
+            }
+        } catch(SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+            addAppContact.setItems(addAppContactList);
+            addAppStartTime.setItems(addAppTimeList);
+            addAppEndTime.setItems(addAppTimeList);
+    };
+
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { populateData(); }
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        addAppData.poplateData();
+    }
 
     public void addAppSaveHandler() {
         Connection conn = DBConnection.getConn();
@@ -45,8 +85,31 @@ public class AddAppointmentScreen implements Initializable {
         LocalTime appEndTime = addAppEndTime.getSelectionModel().getSelectedItem();
         Instant appStartDateTime = setDateTimeFormat(appStartDate, appStartTime).toInstant();
         Instant appEndDateTime = setDateTimeFormat(appEndDate, appEndTime).toInstant();
-        if (validateDateTime(appStartDateTime)) {
-            if (validateDateTime(appEndDateTime)) {
+
+        // Lambda expression 1. Creates a ValidateDateTime boolean Interface. Passing an Instant object to the
+        // Interface, then checking the date to confirm it is a weekday also checking the time is 8am to 10pm EST through
+        // a Lambda expression.
+        ValidateDateTime isValidDT = (instant) -> {
+            ZonedDateTime eastTime = instant.atZone(ZoneId.of("America/New_York"));
+            if (eastTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) || eastTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                Alert dayAlert = new Alert(Alert.AlertType.ERROR);
+                dayAlert.setTitle("Invalid Day");
+                dayAlert.setContentText("Please enter a valid workday (Mon-Fri).");
+                dayAlert.showAndWait();
+                return false;
+            } else if ((eastTime.getHour() < 8) || (eastTime.getHour() > 22)) {
+                Alert timeAlert = new Alert(Alert.AlertType.ERROR);
+                timeAlert.setTitle("Invalid Time");
+                timeAlert.setContentText("Please enter a valid time between 8am and 10pm EST.");
+                timeAlert.showAndWait();
+                return false;
+            } else {
+                return true;
+            }
+        };
+
+        if (isValidDT.validateDateTime(appStartDateTime)) {
+            if (isValidDT.validateDateTime(appEndDateTime)) {
                 Timestamp appAddStartTimestamp = setDateTimeFormat(appStartDate, appStartTime);
                 Timestamp appAddEndTimestamp = setDateTimeFormat(appEndDate, appEndTime);
                 int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
@@ -87,61 +150,8 @@ public class AddAppointmentScreen implements Initializable {
     }
 
     public Timestamp setDateTimeFormat(LocalDate date, LocalTime time) {
-            DateTimeFormatter sdfForTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime formattedDateTime = LocalDateTime.of(date, time);
-            return Timestamp.valueOf(formattedDateTime.format(sdfForTimestamp));
-    }
-
-    public boolean validateDateTime(Instant instant) {
-        ZonedDateTime eastTime = instant.atZone(ZoneId.of("America/New_York"));
-        if (eastTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) || eastTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-            Alert dayAlert = new Alert(Alert.AlertType.ERROR);
-            dayAlert.setTitle("Invalid Day");
-            dayAlert.setContentText("Please enter a valid workday (Mon-Fri).");
-            dayAlert.showAndWait();
-            return false;
-        } else if ((eastTime.getHour() < 8) || (eastTime.getHour() > 22)) {
-            Alert timeAlert = new Alert(Alert.AlertType.ERROR);
-            timeAlert.setTitle("Invalid Time");
-            timeAlert.setContentText("Please enter a valid time between 8am and 10pm EST.");
-            timeAlert.showAndWait();
-            return false;
-        } else { return true; }
-    }
-
-    public void populateData() {
-        ObservableList<String> addAppContactList = FXCollections.observableArrayList();
-        ObservableList<LocalTime> addAppTimeList = FXCollections.observableArrayList();
-        LocalTime time = LocalTime.of(0,0);
-        addAppTimeList.add(time);
-        int n = 0;
-        do {
-            time = time.plusMinutes(15);
-            addAppTimeList.add(time);
-            if (time.getMinute() == 45) {
-                if (time.getHour() == 23) {
-                    break;
-                }
-                time = time.plusHours(1);
-                time = time.minusMinutes(45);
-                addAppTimeList.add(time);
-                n += 1;
-            }
-        } while (n < 24);
-
-        try {
-            Connection connection = DBConnection.getConn();
-            PreparedStatement contactNames = connection.prepareStatement(QueryExecutions.getContactsName());
-            ResultSet contactRS = contactNames.executeQuery();
-            while (contactRS.next()) {
-                String result = contactRS.getString("Contact_Name");
-                addAppContactList.add(result);
-            }
-        } catch(SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-        addAppContact.setItems(addAppContactList);
-        addAppStartTime.setItems(addAppTimeList);
-        addAppEndTime.setItems(addAppTimeList);
+        DateTimeFormatter sdfForTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime formattedDateTime = LocalDateTime.of(date, time);
+        return Timestamp.valueOf(formattedDateTime.format(sdfForTimestamp));
     }
 }

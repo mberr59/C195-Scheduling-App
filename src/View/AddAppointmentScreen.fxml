@@ -26,7 +26,7 @@
    <TextField fx:id="addAppType" layoutX="163.0" layoutY="282.0" promptText="Enter Type" />
    <DatePicker fx:id="addAppStartDate" layoutX="163.0" layoutY="325.0" promptText="Select Date" />
    <Label layoutX="50.0" layoutY="329.0" text="Start Date/Time" />
-   <DatePicker fx:id="addAppDateEnd" layoutX="163.0" layoutY="362.0" promptText="Select Date" />
+   <DatePicker fx:id="addAppEndDate" layoutX="163.0" layoutY="362.0" promptText="Select Date" />
    <Label layoutX="50.0" layoutY="366.0" text="End Date/Time" />
    <Label layoutX="50.0" layoutY="404.0" text="Customer ID" />
    <Label layoutX="50.0" layoutY="436.0" text="User ID" />
