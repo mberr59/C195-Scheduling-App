@@ -1,8 +1,6 @@
 package Helper;
 
 
-import java.sql.Timestamp;
-
 public abstract class QueryExecutions {
 
     //Sql SELECT query for the customers table
@@ -33,12 +31,12 @@ public abstract class QueryExecutions {
 
     public static String getContactID() { return "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?"; }
 
-    public static String addCustomerQuery(){
+    public static String addCustomerQuery() {
         return " INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Division_ID)" +
                 "values (?, ?, ?, ?, ?)";
     }
 
-    public static String updateCustomerQuery(){
+    public static String updateCustomerQuery() {
         return "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
     }
 
@@ -46,10 +44,15 @@ public abstract class QueryExecutions {
 
     public static String deleteCustomer() { return "DELETE FROM customers WHERE Customer_ID = ?";}
 
-    public static String addAppointmentQuery(){
+    public static String addAppointmentQuery() {
         return " INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" +
                 "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     }
 
     public static String getAppTimestamp() { return "SELECT Start, End FROM appointments WHERE Appointment_ID = ?"; }
+
+    public static String updateAppointmentQuery() {
+        return "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
+                "Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+    }
 }

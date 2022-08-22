@@ -42,7 +42,7 @@ public class AppointmentScreen implements Initializable {
     public Button refreshTableButton;
     public Button modAppointment;
 
-    // Lambda Expression 2. Creates a PopulateData Interface and passes the appointment data to the Interface using
+    // Lambda Expression 7. Creates a PopulateData Interface and passes the appointment data to the Interface using
     // a Lambda Expression block.
     PopulateData appointmentData = () -> {
         try {

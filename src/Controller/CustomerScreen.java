@@ -34,7 +34,7 @@ public class CustomerScreen implements Initializable {
     public Button deleteCustomerButton;
     public Button refreshDataButton;
 
-    // Lambda Expression 3. Creates a PopulateData Interface named customerData and passes the data to the Interface
+    // Lambda Expression 6. Creates a PopulateData Interface named customerData and passes the data to the Interface
     // using a Lambda expression block.
     PopulateData customerData = () -> {
         try {

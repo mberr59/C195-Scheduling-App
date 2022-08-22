@@ -98,7 +98,7 @@ public class AddAppointmentScreen implements Initializable {
         // Lambda expression 1. Creates a ValidateDateTime boolean Interface. Passing an Instant object to the
         // Interface, then checking the date to confirm it is a weekday also checking the time is 8am to 10pm EST through
         // a Lambda expression.
-        ValidateDateTime isValidDT = (instant) -> {
+        ValidateDateTime isValidAddDT = (instant) -> {
             ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
             ZonedDateTime eastDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("America/New_York"));
 
@@ -119,39 +119,46 @@ public class AddAppointmentScreen implements Initializable {
             }
         };
 
-        if (isValidDT.validateDateTime(appStartDateTime)) {
-            if (isValidDT.validateDateTime(appEndDateTime)) {
-                Timestamp appAddStartTimestamp = setDateTimeFormat(appStartDate, appStartTime);
-                Timestamp convertedStartTimestamp = timestampConversion.convertDateTime(appAddStartTimestamp);
-                Timestamp appAddEndTimestamp = setDateTimeFormat(appEndDate, appEndTime);
-                Timestamp convertedEndTimestamp = timestampConversion.convertDateTime(appAddEndTimestamp);
-                int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
-                int appAddUserID = Integer.parseInt(addAppUserID.getText());
-                try {
-                    PreparedStatement contactStatement = conn.prepareStatement(QueryExecutions.getContactID());
-                    contactStatement.setString(1, appContact);
-                    ResultSet contactRS = contactStatement.executeQuery();
-                    contactRS.next();
-                    int contactID = contactRS.getInt("Contact_ID");
-                    PreparedStatement addAppointmentData = conn.prepareStatement(QueryExecutions.addAppointmentQuery());
-                    addAppointmentData.setString(1, appTitle);
-                    addAppointmentData.setString(2, appDesc);
-                    addAppointmentData.setString(3, appLocation);
-                    addAppointmentData.setString(4, appType);
-                    addAppointmentData.setTimestamp(5, convertedStartTimestamp);
-                    addAppointmentData.setTimestamp(6, convertedEndTimestamp);
-                    addAppointmentData.setInt(7, appAddCustomerID);
-                    addAppointmentData.setInt(8, appAddUserID);
-                    addAppointmentData.setInt(9, contactID);
-                    int updatedRows = addAppointmentData.executeUpdate();
-                    if (updatedRows > 0) {
-                        System.out.println("Appointment Insert Successful");
-                    } else {
-                        System.out.println("Appointment Insert Unsuccessful");
-                    }
+        if (isValidAddDT.validateDateTime(appStartDateTime)) {
+            if (isValidAddDT.validateDateTime(appEndDateTime)) {
+                if (appStartDateTime.isBefore(appEndDateTime)) {
+                    Timestamp appAddStartTimestamp = Timestamp.from(appStartDateTime);
+                    Timestamp convertedStartTimestamp = timestampConversion.convertDateTime(appAddStartTimestamp);
+                    Timestamp appAddEndTimestamp = Timestamp.from(appEndDateTime);
+                    Timestamp convertedEndTimestamp = timestampConversion.convertDateTime(appAddEndTimestamp);
+                    int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
+                    int appAddUserID = Integer.parseInt(addAppUserID.getText());
+                    try {
+                        PreparedStatement contactStatement = conn.prepareStatement(QueryExecutions.getContactID());
+                        contactStatement.setString(1, appContact);
+                        ResultSet contactRS = contactStatement.executeQuery();
+                        contactRS.next();
+                        int contactID = contactRS.getInt("Contact_ID");
+                        PreparedStatement addAppointmentData = conn.prepareStatement(QueryExecutions.addAppointmentQuery());
+                        addAppointmentData.setString(1, appTitle);
+                        addAppointmentData.setString(2, appDesc);
+                        addAppointmentData.setString(3, appLocation);
+                        addAppointmentData.setString(4, appType);
+                        addAppointmentData.setTimestamp(5, convertedStartTimestamp);
+                        addAppointmentData.setTimestamp(6, convertedEndTimestamp);
+                        addAppointmentData.setInt(7, appAddCustomerID);
+                        addAppointmentData.setInt(8, appAddUserID);
+                        addAppointmentData.setInt(9, contactID);
+                        int updatedRows = addAppointmentData.executeUpdate();
+                        if (updatedRows > 0) {
+                            System.out.println("Appointment Insert Successful");
+                        } else {
+                            System.out.println("Appointment Insert Unsuccessful");
+                        }
 
-                } catch (SQLException sqlException) {
-                    sqlException.printStackTrace();
+                    } catch (SQLException sqlException) {
+                        sqlException.printStackTrace();
+                    }
+                } else {
+                    Alert startAfterEnd = new Alert(Alert.AlertType.ERROR);
+                    startAfterEnd.setTitle("Start date/time after End date/time");
+                    startAfterEnd.setContentText("The Start date/time cannot be to a date/time after End date/time.");
+                    startAfterEnd.showAndWait();
                 }
             }
         }
