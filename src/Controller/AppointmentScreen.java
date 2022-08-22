@@ -20,6 +20,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -57,8 +61,11 @@ public class AppointmentScreen implements Initializable {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                Timestamp startDateTime = rs.getTimestamp("Start");
-                Timestamp endDateTime = rs.getTimestamp("End");
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME;
+                ZonedDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.systemDefault());
+                ZonedDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.systemDefault());
+                LocalDateTime convertedStartDateTime = startDateTime.toLocalDateTime();
+                LocalDateTime convertedEndDateTime = endDateTime.toLocalDateTime();
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
@@ -68,7 +75,8 @@ public class AppointmentScreen implements Initializable {
                 contactRS.next();
                 String contactName = contactRS.getString("Contact_Name");
                 Appointment appointment = new Appointment(appointmentID, title, description, location, contactName,
-                        type, startDateTime, endDateTime, customerID, userID, contactID);
+                        type, LocalDateTime.parse(convertedStartDateTime.format(dateTimeFormatter)),
+                        LocalDateTime.parse(convertedEndDateTime.format(dateTimeFormatter)), customerID, userID, contactID);
                 appointmentData.add(appointment);
 
             }

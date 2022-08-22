@@ -2,6 +2,8 @@ package Model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Appointment {
     private int appointmentID;
@@ -10,15 +12,15 @@ public class Appointment {
     private String location;
     private String contactName;
     private String type;
-    private Timestamp start;
-    private Timestamp end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private int customerID;
     private int userID;
     private int contactID;
 
 
     public Appointment(int appointmentID, String title, String description, String location, String contactName, String type,
-                       Timestamp start, Timestamp end, int customerID, int userID, int contactID) {
+                       LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
         setAppointmentID(appointmentID);
         setTitle(title);
         setDescription(description);
@@ -57,11 +59,11 @@ public class Appointment {
         return type;
     }
 
-    public Timestamp getStartDate() {
+    public LocalDateTime getStartDate() {
         return start;
     }
 
-    public Timestamp getEndDate() {
+    public LocalDateTime getEndDate() {
         return end;
     }
 
@@ -101,11 +103,11 @@ public class Appointment {
         this.type = type;
     }
 
-    public void setStart(Timestamp start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public void setEnd(Timestamp end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 

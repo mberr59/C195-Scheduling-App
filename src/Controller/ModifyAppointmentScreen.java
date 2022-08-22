@@ -1,6 +1,7 @@
 package Controller;
 
 import Helper.DBConnection;
+import Helper.PopulateData;
 import Helper.QueryExecutions;
 import Model.Appointment;
 import javafx.collections.FXCollections;
@@ -33,34 +34,10 @@ public class ModifyAppointmentScreen {
     public ComboBox<LocalTime> modAppEndTime;
     public TextField modAppID;
 
-    public void modAppSaveHandler() {
-    }
-
-    public void modAppCancelHandler() {
-        Stage stage = (Stage) modAppCancel.getScene().getWindow();
-        stage.close();
-    }
-
-    public void populateAppFields(Appointment selectedItem) {
-        populateContactDateTime();
-        modAppTitle.setText(selectedItem.getTitle());
-        modAppDesc.setText(selectedItem.getDescription());
-        modAppID.setText(String.valueOf(selectedItem.getAppointmentID()));
-        modAppLocation.setText(selectedItem.getLocation());
-        modAppContact.getSelectionModel().select(selectedItem.getContactName());
-        modAppType.setText(selectedItem.getType());
-        modAppStartDate.setValue(selectedItem.getStartDate().toLocalDateTime().toLocalDate());
-        modAppStartTime.getSelectionModel().select(selectedItem.getStartDate().toLocalDateTime().toLocalTime());
-        modAppEndDate.setValue(selectedItem.getStartDate().toLocalDateTime().toLocalDate());
-        modAppEndTime.getSelectionModel().select(selectedItem.getEndDate().toLocalDateTime().toLocalTime());
-        modAppCustomerID.setText(String.valueOf(selectedItem.getCustomerID()));
-        modAppUserID.setText(String.valueOf(selectedItem.getUserID()));
-    }
-
-    public void populateContactDateTime() {
+    PopulateData modAppData = () -> {
         ObservableList<String> modAppContactList = FXCollections.observableArrayList();
         ObservableList<LocalTime> addAppTimeList = FXCollections.observableArrayList();
-        LocalTime time = LocalTime.of(0,0);
+        LocalTime time = LocalTime.of(0, 0);
         addAppTimeList.add(time);
         int n = 0;
         do {
@@ -85,11 +62,37 @@ public class ModifyAppointmentScreen {
                 String result = contactRS.getString("Contact_Name");
                 modAppContactList.add(result);
             }
-        } catch(SQLException sqlException) {
+        } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
         modAppContact.setItems(modAppContactList);
         modAppStartTime.setItems(addAppTimeList);
         modAppEndTime.setItems(addAppTimeList);
+    };
+
+    public void modAppSaveHandler() {
+    }
+
+    public void modAppCancelHandler() {
+        Stage stage = (Stage) modAppCancel.getScene().getWindow();
+        stage.close();
+    }
+
+    public void populateAppFields(Appointment selectedItem) {
+        modAppData.poplateData();
+        modAppTitle.setText(selectedItem.getTitle());
+        modAppDesc.setText(selectedItem.getDescription());
+        modAppID.setText(String.valueOf(selectedItem.getAppointmentID()));
+        modAppLocation.setText(selectedItem.getLocation());
+        modAppContact.getSelectionModel().select(selectedItem.getContactName());
+        modAppType.setText(selectedItem.getType());
+        modAppStartDate.setValue(selectedItem.getStartDate().toLocalDate());
+        modAppStartTime.getSelectionModel().select(selectedItem.getStartDate().toLocalTime());
+        modAppEndDate.setValue(selectedItem.getStartDate().toLocalDate());
+        modAppEndTime.getSelectionModel().select(selectedItem.getEndDate().toLocalTime());
+        modAppCustomerID.setText(String.valueOf(selectedItem.getCustomerID()));
+        modAppUserID.setText(String.valueOf(selectedItem.getUserID()));
     }
 }
+
+
