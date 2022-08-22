@@ -1,9 +1,6 @@
 package Model;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 public class Appointment {
     private int appointmentID;
@@ -14,6 +11,8 @@ public class Appointment {
     private String type;
     private LocalDateTime start;
     private LocalDateTime end;
+    private String startString;
+    private String endString;
     private int customerID;
     private int userID;
     private int contactID;
@@ -29,6 +28,21 @@ public class Appointment {
         setType(type);
         setStart(start);
         setEnd(end);
+        setCustomerID(customerID);
+        setUserID(userID);
+        setContactID(contactID);
+    }
+
+    public Appointment(int appointmentID, String title, String description, String location, String contactName, String type,
+                       String startString, String endString, int customerID, int userID, int contactID) {
+        setAppointmentID(appointmentID);
+        setTitle(title);
+        setDescription(description);
+        setLocation(location);
+        setContact(contactName);
+        setType(type);
+        setStartString(startString);
+        setEndString(endString);
         setCustomerID(customerID);
         setUserID(userID);
         setContactID(contactID);
@@ -75,9 +89,11 @@ public class Appointment {
         return userID;
     }
 
-    public int getContactID() {
-        return contactID;
-    }
+    public int getContactID() { return contactID; }
+
+    public String getStartString() { return startString; }
+
+    public String getEndString() { return endString; }
 
     public void setAppointmentID(int appointmentID) {
         this.appointmentID = appointmentID;
@@ -103,9 +119,7 @@ public class Appointment {
         this.type = type;
     }
 
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
+    public void setStart(LocalDateTime start) { this.start = start; }
 
     public void setEnd(LocalDateTime end) {
         this.end = end;
@@ -119,7 +133,9 @@ public class Appointment {
         this.userID = userID;
     }
 
-    public void setContactID(int contactID) {
-        this.contactID = contactID;
-    }
+    public void setContactID(int contactID) { this.contactID = contactID;}
+
+    public void setStartString(String startString) { this.startString = startString; }
+
+    public void setEndString(String endString) { this.endString = endString; }
 }

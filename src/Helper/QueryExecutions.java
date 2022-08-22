@@ -1,6 +1,8 @@
 package Helper;
 
 
+import java.sql.Timestamp;
+
 public abstract class QueryExecutions {
 
     //Sql SELECT query for the customers table
@@ -48,4 +50,6 @@ public abstract class QueryExecutions {
         return " INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID)" +
                 "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     }
+
+    public static String getAppTimestamp() { return "SELECT Start, End FROM appointments WHERE Appointment_ID = ?"; }
 }

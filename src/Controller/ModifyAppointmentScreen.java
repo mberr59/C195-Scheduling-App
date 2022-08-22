@@ -12,10 +12,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalTime;
 
 public class ModifyAppointmentScreen {
@@ -79,19 +76,30 @@ public class ModifyAppointmentScreen {
     }
 
     public void populateAppFields(Appointment selectedItem) {
-        modAppData.poplateData();
-        modAppTitle.setText(selectedItem.getTitle());
-        modAppDesc.setText(selectedItem.getDescription());
-        modAppID.setText(String.valueOf(selectedItem.getAppointmentID()));
-        modAppLocation.setText(selectedItem.getLocation());
-        modAppContact.getSelectionModel().select(selectedItem.getContactName());
-        modAppType.setText(selectedItem.getType());
-        modAppStartDate.setValue(selectedItem.getStartDate().toLocalDate());
-        modAppStartTime.getSelectionModel().select(selectedItem.getStartDate().toLocalTime());
-        modAppEndDate.setValue(selectedItem.getStartDate().toLocalDate());
-        modAppEndTime.getSelectionModel().select(selectedItem.getEndDate().toLocalTime());
-        modAppCustomerID.setText(String.valueOf(selectedItem.getCustomerID()));
-        modAppUserID.setText(String.valueOf(selectedItem.getUserID()));
+        try {
+            modAppData.poplateData();
+            Connection conn = DBConnection.getConn();
+            PreparedStatement timestampQuery = conn.prepareStatement(QueryExecutions.getAppTimestamp());
+            timestampQuery.setInt(1, selectedItem.getAppointmentID());
+            ResultSet timestampRS = timestampQuery.executeQuery();
+            timestampRS.next();
+            Timestamp appStartTimestamp = timestampRS.getTimestamp("Start");
+            Timestamp appEndTimestamp = timestampRS.getTimestamp("End");
+            modAppTitle.setText(selectedItem.getTitle());
+            modAppDesc.setText(selectedItem.getDescription());
+            modAppID.setText(String.valueOf(selectedItem.getAppointmentID()));
+            modAppLocation.setText(selectedItem.getLocation());
+            modAppContact.getSelectionModel().select(selectedItem.getContactName());
+            modAppType.setText(selectedItem.getType());
+            modAppStartDate.setValue(appStartTimestamp.toLocalDateTime().toLocalDate());
+            modAppStartTime.getSelectionModel().select(appStartTimestamp.toLocalDateTime().toLocalTime());
+            modAppEndDate.setValue(appEndTimestamp.toLocalDateTime().toLocalDate());
+            modAppEndTime.getSelectionModel().select(appEndTimestamp.toLocalDateTime().toLocalTime());
+            modAppCustomerID.setText(String.valueOf(selectedItem.getCustomerID()));
+            modAppUserID.setText(String.valueOf(selectedItem.getUserID()));
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
 }
 

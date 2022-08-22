@@ -35,8 +35,8 @@ public class AppointmentScreen implements Initializable {
     public TableColumn<Appointment, String> appointmentLocation;
     public TableColumn<Appointment, String> appointmentContact;
     public TableColumn<Appointment, String> appointmentType;
-    public TableColumn<Appointment, Date> appointmentStart;
-    public TableColumn<Appointment, Date> appointmentEnd;
+    public TableColumn<Appointment, String> appointmentStart;
+    public TableColumn<Appointment, String> appointmentEnd;
     public TableColumn<Appointment, Integer> appointmentCustomerID;
     public TableColumn<Appointment, Integer> appointmentUserID;
     public Button addAppointment;
@@ -61,11 +61,11 @@ public class AppointmentScreen implements Initializable {
                 String description = rs.getString("Description");
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME;
-                ZonedDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.systemDefault());
-                ZonedDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.systemDefault());
-                LocalDateTime convertedStartDateTime = startDateTime.toLocalDateTime();
-                LocalDateTime convertedEndDateTime = endDateTime.toLocalDateTime();
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh':'mm a");
+                LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
+                String startDTString = dateTimeFormatter.format(startDateTime);
+                String endDTString = dateTimeFormatter.format(endDateTime);
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
@@ -75,8 +75,7 @@ public class AppointmentScreen implements Initializable {
                 contactRS.next();
                 String contactName = contactRS.getString("Contact_Name");
                 Appointment appointment = new Appointment(appointmentID, title, description, location, contactName,
-                        type, LocalDateTime.parse(convertedStartDateTime.format(dateTimeFormatter)),
-                        LocalDateTime.parse(convertedEndDateTime.format(dateTimeFormatter)), customerID, userID, contactID);
+                        type, startDTString, endDTString, customerID, userID, contactID);
                 appointmentData.add(appointment);
 
             }
@@ -86,8 +85,8 @@ public class AppointmentScreen implements Initializable {
             appointmentLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
             appointmentContact.setCellValueFactory(new PropertyValueFactory<>("contactName"));
             appointmentType.setCellValueFactory(new PropertyValueFactory<>("type"));
-            appointmentStart.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-            appointmentEnd.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+            appointmentStart.setCellValueFactory(new PropertyValueFactory<>("startString"));
+            appointmentEnd.setCellValueFactory(new PropertyValueFactory<>("endString"));
             appointmentCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
             appointmentUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
             appointmentTable.setItems(appointmentData);

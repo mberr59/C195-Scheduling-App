@@ -24,7 +24,7 @@
           <TableColumn fx:id="appointmentUserID" prefWidth="57.00006103515625" text="User_ID" />
       </columns>
     </TableView>
-   <Button fx:id="addAppointment" layoutX="364.0" layoutY="568.0" mnemonicParsing="false" onAction="#addAppointmentHandler" prefWidth="54.0" text="Add" />
+   <Button fx:id="addAppointment" layoutX="364.0" layoutY="568.0" mnemonicParsing="false" onAction="#addAppointmentHandler" prefWidth="56.0" text="Add" />
    <Button fx:id="refreshTableButton" layoutX="884.0" layoutY="38.0" mnemonicParsing="false" onAction="#refreshTableHandler" text="Refresh" />
-   <Button fx:id="modAppointment" layoutX="443.0" layoutY="568.0" mnemonicParsing="false" onAction="#modAppointmentHandler" prefWidth="54.0" text="Modify" />
+   <Button fx:id="modAppointment" layoutX="443.0" layoutY="568.0" mnemonicParsing="false" onAction="#modAppointmentHandler" prefHeight="26.0" prefWidth="56.0" text="Update" />
 </AnchorPane>
