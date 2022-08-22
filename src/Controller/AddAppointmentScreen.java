@@ -1,9 +1,6 @@
 package Controller;
 
-import Helper.DBConnection;
-import Helper.PopulateData;
-import Helper.ValidateDateTime;
-import Helper.QueryExecutions;
+import Helper.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -31,6 +28,16 @@ public class AddAppointmentScreen implements Initializable {
     public ComboBox<LocalTime> addAppStartTime;
     public ComboBox<LocalTime> addAppEndTime;
 
+    ConvertDateTime timestampConversion = (timestamp) -> {
+        LocalDateTime localDT = timestamp.toLocalDateTime();
+        ZonedDateTime zonedDT = localDT.atZone(ZoneId.systemDefault());
+        ZonedDateTime convertedZDT = zonedDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+        LocalDateTime convertedLDT = convertedZDT.toLocalDateTime();
+        return Timestamp.valueOf(convertedLDT);
+    };
+
+    // Lambda expression 2. Creates a PopulateData Interface and passes instructions to add the Appointment data
+    // to the proper fields using a Lambda expression.
     PopulateData addAppData = () -> {
         ObservableList<String> addAppContactList = FXCollections.observableArrayList();
         ObservableList<LocalTime> addAppTimeList = FXCollections.observableArrayList();
@@ -90,14 +97,16 @@ public class AddAppointmentScreen implements Initializable {
         // Interface, then checking the date to confirm it is a weekday also checking the time is 8am to 10pm EST through
         // a Lambda expression.
         ValidateDateTime isValidDT = (instant) -> {
-            ZonedDateTime eastTime = instant.atZone(ZoneId.of("America/New_York"));
-            if (eastTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) || eastTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+            ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
+            ZonedDateTime eastDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("America/New_York"));
+
+            if (eastDateTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) || eastDateTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
                 Alert dayAlert = new Alert(Alert.AlertType.ERROR);
                 dayAlert.setTitle("Invalid Day");
                 dayAlert.setContentText("Please enter a valid workday (Mon-Fri).");
                 dayAlert.showAndWait();
                 return false;
-            } else if ((eastTime.getHour() < 8) || (eastTime.getHour() > 22)) {
+            } else if ((eastDateTime.getHour() < 8) || (eastDateTime.getHour() > 22)) {
                 Alert timeAlert = new Alert(Alert.AlertType.ERROR);
                 timeAlert.setTitle("Invalid Time");
                 timeAlert.setContentText("Please enter a valid time between 8am and 10pm EST.");
@@ -111,7 +120,9 @@ public class AddAppointmentScreen implements Initializable {
         if (isValidDT.validateDateTime(appStartDateTime)) {
             if (isValidDT.validateDateTime(appEndDateTime)) {
                 Timestamp appAddStartTimestamp = setDateTimeFormat(appStartDate, appStartTime);
+                Timestamp convertedStartTimestamp = timestampConversion.convertDateTime(appAddStartTimestamp);
                 Timestamp appAddEndTimestamp = setDateTimeFormat(appEndDate, appEndTime);
+                Timestamp convertedEndTimestamp = timestampConversion.convertDateTime(appAddEndTimestamp);
                 int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
                 int appAddUserID = Integer.parseInt(addAppUserID.getText());
                 try {
@@ -125,8 +136,8 @@ public class AddAppointmentScreen implements Initializable {
                     addAppointmentData.setString(2, appDesc);
                     addAppointmentData.setString(3, appLocation);
                     addAppointmentData.setString(4, appType);
-                    addAppointmentData.setTimestamp(5, appAddStartTimestamp);
-                    addAppointmentData.setTimestamp(6, appAddEndTimestamp);
+                    addAppointmentData.setTimestamp(5, convertedStartTimestamp);
+                    addAppointmentData.setTimestamp(6, convertedEndTimestamp);
                     addAppointmentData.setInt(7, appAddCustomerID);
                     addAppointmentData.setInt(8, appAddUserID);
                     addAppointmentData.setInt(9, contactID);
