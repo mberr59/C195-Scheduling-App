@@ -6,21 +6,22 @@ import Helper.QueryExecutions;
 import Model.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -41,12 +42,17 @@ public class AppointmentScreen implements Initializable {
     public Button customerListButton;
     public Button refreshTableButton;
     public Button modAppointment;
+    public RadioButton byMonthRadio;
+    public RadioButton byWeekRadio;
+    public ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+    public LocalDateTime startDateTime;
+    public Button appFilter;
+    public ToggleGroup filterGroup;
 
     // Lambda Expression 7. Creates a PopulateData Interface and passes the appointment data to the Interface using
     // a Lambda Expression block.
     PopulateData appointmentData = () -> {
         try {
-            ObservableList<Appointment> appointmentData = FXCollections.observableArrayList();
             Connection conn = DBConnection.getConn();
             String query = QueryExecutions.getSelectAppointmentQuery();
             Statement st = conn.createStatement();
@@ -60,7 +66,7 @@ public class AppointmentScreen implements Initializable {
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh':'mm a");
-                LocalDateTime startDateTime = rs.getTimestamp("Start").toLocalDateTime();
+                startDateTime = rs.getTimestamp("Start").toLocalDateTime();
                 LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
                 String startDTString = dateTimeFormatter.format(startDateTime);
                 String endDTString = dateTimeFormatter.format(endDateTime);
@@ -74,7 +80,7 @@ public class AppointmentScreen implements Initializable {
                 String contactName = contactRS.getString("Contact_Name");
                 Appointment appointment = new Appointment(appointmentID, title, description, location, contactName,
                         type, startDTString, endDTString, customerID, userID, contactID);
-                appointmentData.add(appointment);
+                appointmentList.add(appointment);
 
             }
             appointmentID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
@@ -87,7 +93,7 @@ public class AppointmentScreen implements Initializable {
             appointmentEnd.setCellValueFactory(new PropertyValueFactory<>("endString"));
             appointmentCustomerID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
             appointmentUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
-            appointmentTable.setItems(appointmentData);
+            appointmentTable.setItems(appointmentList);
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -122,7 +128,7 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
-    public void refreshTableHandler() { appointmentData.poplateData();}
+    public void refreshTableHandler() { appointmentTable.refresh();}
 
     public void modAppointmentHandler() {
         try {
@@ -142,6 +148,59 @@ public class AppointmentScreen implements Initializable {
             selectionAlert.setTitle("Selection Error");
             selectionAlert.setContentText("Please select an Appointment to modify.");
             selectionAlert.showAndWait();
+        }
+    }
+
+    public void byMonthHandler() {
+        int todayDateMonth = LocalDateTime.now().getMonth().getValue();
+        int n = 0;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh':'mm a");
+        ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
+        for (Appointment app: appointmentList) {
+            LocalDateTime appointmentDT = LocalDateTime.parse(appointmentList.get(n).getStartString(), dateTimeFormatter);
+            int appointmentMonth = appointmentDT.getMonth().getValue();
+            if (todayDateMonth == appointmentMonth) {
+                monthlyAppointments.add(app);
+            }
+            n += 1;
+        }
+        appointmentTable.setItems(monthlyAppointments);
+    }
+
+    public void byWeekHandler() {
+        ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh':'mm a");
+        LocalDateTime todayDateWeek = LocalDateTime.now();
+        int day = todayDateWeek.getDayOfWeek().getValue();
+        int n = 0;
+        do {
+            day -= 1;
+        } while (day > 1);
+        for (Appointment app : appointmentList) {
+            LocalDateTime appointmentDT = LocalDateTime.parse(appointmentList.get(n).getStartString(), dateTimeFormatter);
+            int appointmentDay = appointmentDT.getDayOfWeek().getValue();
+            do {
+                if (appointmentDay == day) {
+                    weeklyAppointments.add(app);
+                }
+                day += 1;
+            } while (day <= 7);
+            day = 1;
+            n += 1;
+        }
+        appointmentTable.setItems(weeklyAppointments);
+    }
+
+    public void appFilterHandler() {
+        if (byMonthRadio.isSelected()) {
+            byMonthHandler();
+        } else if (byWeekRadio.isSelected()) {
+            byWeekHandler();
+        } else {
+            Alert filterAlert = new Alert(Alert.AlertType.WARNING);
+            filterAlert.setTitle("Select Month or Week");
+            filterAlert.setContentText("Please select the Month or Week radio button.");
+            filterAlert.showAndWait();
         }
     }
 }

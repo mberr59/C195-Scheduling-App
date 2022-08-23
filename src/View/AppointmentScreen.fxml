@@ -27,4 +27,10 @@
    <Button fx:id="addAppointment" layoutX="364.0" layoutY="568.0" mnemonicParsing="false" onAction="#addAppointmentHandler" prefWidth="56.0" text="Add" />
    <Button fx:id="refreshTableButton" layoutX="884.0" layoutY="38.0" mnemonicParsing="false" onAction="#refreshTableHandler" text="Refresh" />
    <Button fx:id="modAppointment" layoutX="443.0" layoutY="568.0" mnemonicParsing="false" onAction="#modAppointmentHandler" prefHeight="26.0" prefWidth="56.0" text="Update" />
+   <RadioButton fx:id="byMonthRadio" layoutX="169.0" layoutY="76.0" mnemonicParsing="false" text="By Month">
+      <toggleGroup>
+         <ToggleGroup fx:id="filterGroup" />
+      </toggleGroup></RadioButton>
+   <RadioButton fx:id="byWeekRadio" layoutX="305.0" layoutY="76.0" mnemonicParsing="false" text="By Week" toggleGroup="$filterGroup" />
+   <Button fx:id="appFilter" layoutX="253.0" layoutY="37.0" mnemonicParsing="false" onAction="#appFilterHandler" prefWidth="56.0" text="Filter" />
 </AnchorPane>
