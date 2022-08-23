@@ -55,4 +55,6 @@ public abstract class QueryExecutions {
         return "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
                 "Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
     }
+
+    public static String deleteAppointment() { return "DELETE FROM appointments WHERE Appointment_ID = ?"; }
 }
