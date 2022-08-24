@@ -46,6 +46,7 @@ public class AppointmentScreen implements Initializable {
     public ToggleGroup filterGroup;
     public Button appDelete;
     public Button appExit;
+    public Button appReports;
 
     // Lambda Expression 7. Creates a PopulateData Interface and passes the appointment data to the Interface using
     // a Lambda Expression block.
@@ -258,5 +259,9 @@ public class AppointmentScreen implements Initializable {
     public void appExitHandler() {
         Stage stage = (Stage) appExit.getScene().getWindow();
         stage.close();
+    }
+
+    public void appReportsHandler() {
+
     }
 }

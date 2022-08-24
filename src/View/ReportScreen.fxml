@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="633.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ReportScreen">
+   <TextArea fx:id="reportTF" editable="false" layoutX="11.0" layoutY="14.0" prefHeight="522.0" prefWidth="577.0"
+             wrapText="true"/>
+   <Button fx:id="exitButton" layoutX="272.0" layoutY="559.0" mnemonicParsing="false" onAction="#onExitHandler"
+           prefWidth="56.0" text="Exit"/>
+</AnchorPane>
