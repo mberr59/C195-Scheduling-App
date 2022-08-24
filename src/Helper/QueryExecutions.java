@@ -59,4 +59,8 @@ public abstract class QueryExecutions {
     }
 
     public static String deleteAppointment() { return "DELETE FROM appointments WHERE Appointment_ID = ?"; }
+
+    public static String getUsernames() { return "SELECT User_Name FROM users"; }
+
+    public static String getPassword() { return "SELECT Password FROM users WHERE User_Name = ?"; }
 }
