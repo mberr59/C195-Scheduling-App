@@ -94,6 +94,8 @@ public class AddAppointmentScreen implements Initializable {
         LocalTime appEndTime = addAppEndTime.getSelectionModel().getSelectedItem();
         Instant appStartDateTime = setDateTimeFormat(appStartDate, appStartTime).toInstant();
         Instant appEndDateTime = setDateTimeFormat(appEndDate, appEndTime).toInstant();
+        int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
+        int appAddUserID = Integer.parseInt(addAppUserID.getText());
 
         // Lambda expression 1. Creates a ValidateDateTime boolean Interface. Passing an Instant object to the
         // Interface, then checking the date to confirm it is a weekday also checking the time is 8am to 10pm EST through
@@ -126,8 +128,9 @@ public class AddAppointmentScreen implements Initializable {
                     Timestamp convertedStartTimestamp = timestampConversion.convertDateTime(appAddStartTimestamp);
                     Timestamp appAddEndTimestamp = Timestamp.from(appEndDateTime);
                     Timestamp convertedEndTimestamp = timestampConversion.convertDateTime(appAddEndTimestamp);
-                    int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
-                    int appAddUserID = Integer.parseInt(addAppUserID.getText());
+                    if (checkForOverlap(appAddCustomerID, appAddStartTimestamp, appAddEndTimestamp)) {
+                        return;
+                    }
                     try {
                         PreparedStatement contactStatement = conn.prepareStatement(QueryExecutions.getContactID());
                         contactStatement.setString(1, appContact);
@@ -173,5 +176,47 @@ public class AddAppointmentScreen implements Initializable {
         DateTimeFormatter sdfForTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime formattedDateTime = LocalDateTime.of(date, time);
         return Timestamp.valueOf(formattedDateTime.format(sdfForTimestamp));
+    }
+
+    public boolean checkForOverlap(int c_ID, Timestamp startTime, Timestamp endTime) {
+        boolean overlapDetected = false;
+        try {
+            Connection connection = DBConnection.getConn();
+            Alert overlapAlert = new Alert(Alert.AlertType.ERROR);
+            LocalDateTime proposedStart = startTime.toLocalDateTime();
+            LocalDateTime proposedEnd = endTime.toLocalDateTime();
+            PreparedStatement appStatement = connection.prepareStatement(QueryExecutions.getAppTimestampCustomer());
+            appStatement.setInt(1, c_ID);
+            ResultSet appRS = appStatement.executeQuery();
+            while (appRS.next()) {
+                LocalDateTime savedStart = appRS.getTimestamp("Start").toLocalDateTime();
+                LocalDateTime savedEnd = appRS.getTimestamp("End").toLocalDateTime();
+                if ((savedStart.isAfter(proposedStart) || savedStart.isEqual(proposedStart)) && savedStart.isBefore(proposedEnd)) {
+                    overlapAlert.setTitle("Overlapping Appointments");
+                    overlapAlert.setContentText("This time conflicts with an already scheduled appointment.\n" +
+                            "Please enter a different time.");
+                    overlapAlert.showAndWait();
+                    overlapDetected = true;
+
+                } else if (savedEnd.isAfter(proposedStart) && (savedEnd.isBefore(proposedEnd) || savedEnd.isEqual(proposedEnd))) {
+                    overlapAlert.setTitle("Overlapping Appointments");
+                    overlapAlert.setContentText("This time conflicts with an already scheduled appointment.\n" +
+                            "Please enter a different time.");
+                    overlapAlert.showAndWait();
+                    overlapDetected = true;
+
+                } else if ((savedStart.isBefore(proposedStart) || savedStart.isEqual(proposedStart)) && (savedEnd.isAfter(proposedEnd) || savedEnd.isEqual(proposedEnd))) {
+                    overlapAlert.setTitle("Overlapping Appointments");
+                    overlapAlert.setContentText("This time conflicts with an already scheduled appointment.\n" +
+                            "Please enter a different time.");
+                    overlapAlert.showAndWait();
+                    overlapDetected = true;
+                }
+            }
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return overlapDetected;
     }
 }

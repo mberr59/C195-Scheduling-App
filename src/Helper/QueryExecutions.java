@@ -51,6 +51,8 @@ public abstract class QueryExecutions {
 
     public static String getAppTimestamp() { return "SELECT Start, End FROM appointments WHERE Appointment_ID = ?"; }
 
+    public static String getAppTimestampCustomer() { return "SELECT Start, End FROM appointments WHERE Customer_ID = ?"; }
+
     public static String updateAppointmentQuery() {
         return "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, " +
                 "Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";

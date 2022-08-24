@@ -1,7 +1,5 @@
 1. Login Screen functionality
 
-2. Error to check for overlapping appointments for customers
-
 3. Validate username and password used on the login screen
 
 4. Write code to provide an alert when there is an appointment within 15 minutes of the user’s log-in.
