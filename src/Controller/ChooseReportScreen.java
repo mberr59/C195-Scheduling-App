@@ -1,6 +1,5 @@
 package Controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,13 +35,13 @@ public class ChooseReportScreen {
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
         } catch (IOException ignored) {
-            
+
         }
     }
 
-    public void ftcAppHandler(ActionEvent actionEvent) {
+    public void ftcAppHandler() {
     }
 
-    public void repCloseHandler(ActionEvent actionEvent) {
+    public void repCloseHandler() {
     }
 }

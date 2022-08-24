@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -272,5 +274,48 @@ public class AppointmentScreen implements Initializable {
         } catch (IOException ioe){
             ioe.printStackTrace();
         }
+    }
+
+    public void checkAppointmentTimes(int userID) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Alert appAlert = new Alert(Alert.AlertType.INFORMATION);
+        appAlert.setTitle("Appointments");
+        appAlert.setContentText("No appointments within 15 minutes.");
+        try {
+            Connection conn = DBConnection.getConn();
+            PreparedStatement appCheck = conn.prepareStatement(QueryExecutions.getAppByUser());
+            appCheck.setInt(1, userID);
+            ResultSet appRS = appCheck.executeQuery();
+            while(appRS.next()) {
+                LocalDateTime appTime = appRS.getTimestamp("Start").toLocalDateTime();
+                if (currentTime.getYear() == appTime.getYear()) {
+                    if (currentTime.getDayOfYear() == appTime.getDayOfYear()) {
+                        if (currentTime.getHour() == appTime.getHour()) {
+                            if ((appTime.getMinute() - currentTime.getMinute()) <= 15 && appTime.isAfter(currentTime)) {
+                                ZonedDateTime zonedAppTime = appTime.atZone(ZoneId.systemDefault());
+                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
+                                LocalDateTime convertedAppTime = zonedAppTime.toLocalDateTime();
+                                appAlert.setContentText("Appointment: " + appRS.getInt("Appointment_ID") + "\nDate: " +
+                                        convertedAppTime.toLocalDate().toString() + "\nTime: " + dtf.format(convertedAppTime.toLocalTime()) +
+                                        "\nis within 15 minutes.");
+                            }
+                        } else if (appTime.getHour() == (currentTime.getHour() + 1)){
+                            if (((appTime.getMinute() + 60) - currentTime.getMinute()) <= 15 && appTime.isAfter(currentTime)) {
+                                ZonedDateTime zonedAppTime = appTime.atZone(ZoneId.systemDefault());
+                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("hh:mm a");
+                                LocalDateTime convertedAppTime = zonedAppTime.toLocalDateTime();
+                                appAlert.setContentText("Appointment: " + appRS.getInt("Appointment_ID") + "\nDate: " +
+                                        convertedAppTime.toLocalDate().toString() + "\nTime: " + dtf.format(convertedAppTime.toLocalTime()) +
+                                        "\nis within 15 minutes.");
+                            }
+                        }
+                    }
+                }
+            }
+            appAlert.showAndWait();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+
     }
 }

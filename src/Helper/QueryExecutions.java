@@ -51,6 +51,10 @@ public abstract class QueryExecutions {
 
     public static String getAppTimestamp() { return "SELECT Start, End FROM appointments WHERE Appointment_ID = ?"; }
 
+    public static String getAppByUser() { return "SELECT * FROM appointments WHERE User_ID = ?"; }
+
+    public static String getUserID() { return "SELECT User_ID FROM users WHERE User_Name = ?"; }
+
     public static String getAppTimestampCustomer() { return "SELECT Start, End FROM appointments WHERE Customer_ID = ?"; }
 
     public static String updateAppointmentQuery() {

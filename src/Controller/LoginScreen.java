@@ -92,15 +92,22 @@ public class LoginScreen implements Initializable {
             boolean passFound = false;
             String providedPassword = passwordText.getText();
             PreparedStatement passwordStatement = conn.prepareStatement(QueryExecutions.getPassword());
+            PreparedStatement userIDStatement = conn.prepareStatement(QueryExecutions.getUserID());
+            userIDStatement.setString(1, username);
+            ResultSet userIDRS = userIDStatement.executeQuery();
+            userIDRS.next();
             passwordStatement.setString(1, username);
             ResultSet passwordRS = passwordStatement.executeQuery();
             while (passwordRS.next()) {
                 String result = passwordRS.getString("Password");
                 if (providedPassword.equals(result)) {
                     passFound = true;
-                    Parent root;
                     try {
-                        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AppointmentScreen.fxml")));
+                        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/AppointmentScreen.fxml")));
+                        Parent root = loader.load();
+
+                        AppointmentScreen checkApp = loader.getController();
+                        checkApp.checkAppointmentTimes(userIDRS.getInt("User_ID"));
                         Stage appStage = new Stage();
                         appStage.setTitle("Appointment Screen");
                         appStage.setScene(new Scene(root));
