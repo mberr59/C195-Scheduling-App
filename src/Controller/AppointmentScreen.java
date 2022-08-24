@@ -262,6 +262,15 @@ public class AppointmentScreen implements Initializable {
     }
 
     public void appReportsHandler() {
-
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/ChooseReportScreen.fxml")));
+            Stage repStage = new Stage();
+            repStage.setTitle("Choose Report");
+            repStage.setScene(new Scene(root));
+            repStage.show();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
     }
 }

@@ -35,6 +35,10 @@ public class LoginScreen implements Initializable {
     public Label welcomeLabel;
     public Label userLabel;
     public Label zoneLabel;
+    public Locale userLocale = Locale.getDefault();
+    public Alert usernameAlert = new Alert(Alert.AlertType.ERROR);
+    public Alert passwordAlert = new Alert(Alert.AlertType.ERROR);
+
     private final ZoneId z = ZoneId.systemDefault();
     // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // TODO Change this path to root folder of project before submitting!
@@ -58,9 +62,15 @@ public class LoginScreen implements Initializable {
                 }
             }
             if (!nameFound) {
-                Alert usernameAlert = new Alert(Alert.AlertType.ERROR);
-                usernameAlert.setTitle("Incorrect Username");
-                usernameAlert.setContentText("Username provided not found.");
+                if (userLocale.getLanguage().equals("fr")){
+                    ResourceBundle errorLabels = ResourceBundle.getBundle("Language/Lang", userLocale);
+                    usernameAlert.setTitle("Incorrect " + errorLabels.getString("Username"));
+                    usernameAlert.setContentText(errorLabels.getString("Username") + " " + errorLabels.getString("provided")
+                            + " incorrect");
+                } else {
+                    usernameAlert.setTitle("Incorrect Username");
+                    usernameAlert.setContentText("Username provided incorrect.");
+                }
                 usernameAlert.showAndWait();
                 try {
                     FileWriter writer = new FileWriter(loginLogs, true);
@@ -105,9 +115,15 @@ public class LoginScreen implements Initializable {
                 }
             }
             if (!passFound) {
-                Alert passwordAlert = new Alert(Alert.AlertType.ERROR);
-                passwordAlert.setTitle("Incorrect Password");
-                passwordAlert.setContentText("Password provided not found.");
+                if (userLocale.getLanguage().equals("fr")) {
+                    ResourceBundle errorLabels = ResourceBundle.getBundle("Language/Lang", userLocale);
+                    passwordAlert.setTitle("Incorrect " + errorLabels.getString("Password"));
+                    passwordAlert.setContentText(errorLabels.getString("Password") + " " + errorLabels.getString("provided") +
+                            " incorrect.");
+                } else {
+                    passwordAlert.setTitle("Incorrect Password");
+                    passwordAlert.setContentText("Password provided incorrect.");
+                }
                 passwordAlert.showAndWait();
                 try {
                     FileWriter writer = new FileWriter(loginLogs, true);
@@ -131,7 +147,7 @@ public class LoginScreen implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Initialized");
         zoneLabel.setText("Zone: " + z.getId());
-        localeCheck(Locale.getDefault());
+        localeCheck(userLocale);
     }
 
     public void localeCheck (Locale locale) {

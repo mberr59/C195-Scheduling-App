@@ -5,6 +5,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class ReportScreen {
     public TextArea reportTF;
     public Button exitButton;
@@ -14,7 +18,14 @@ public class ReportScreen {
         stage.close();
     }
 
-    public void showReport() {
-
+    public void showCustomerReport(File report) {
+        try {
+            Scanner scanner = new Scanner(new File(String.valueOf(report))).useDelimiter("----------------------");
+            while (scanner.hasNext()){
+                reportTF.appendText(scanner.next());
+            }
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
     }
 }
