@@ -20,9 +20,9 @@
    •  an additional report of your choice that is different from the two other required reports in this prompt and from
       the user log-in date and time stamp that will be tracked in part C
 
-6. Write code that provides the ability to track user activity by recording all user log-in attempts, dates,
+6. --FINISHED-- Write code that provides the ability to track user activity by recording all user log-in attempts, dates,
    and time stamps and whether each attempt was successful in a file named login_activity.txt. Append each new record
-   to the existing file, and save to the root folder of the application.
+   to the existing file, and save to the root folder of the application. --FINISHED--
 
 7.  Provide descriptive Javadoc comments for at least 70 percent of the classes and their members throughout the code,
     and create an index.html file of your comments to include with your submission based on Oracle’s guidelines for the

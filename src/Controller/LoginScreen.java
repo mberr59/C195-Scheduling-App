@@ -1,10 +1,13 @@
 package Controller;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import Helper.DBConnection;
@@ -33,8 +36,14 @@ public class LoginScreen implements Initializable {
     public Label userLabel;
     public Label zoneLabel;
     private final ZoneId z = ZoneId.systemDefault();
+    // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // TODO Change this path to root folder of project before submitting!
+    private final File loginLogs = new File("C:\\Users\\Micah\\Logs\\login_activity.txt");
+    // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     public void userNameTextHandler() {
+        String pass = passwordText.getText();
+        LocalDateTime timestamp = LocalDateTime.now();
         try {
             Connection conn = DBConnection.getConn();
             boolean nameFound = false;
@@ -45,7 +54,7 @@ public class LoginScreen implements Initializable {
                 String result = usernameRS.getString("User_Name");
                 if (providedUsername.equals(result)) {
                     nameFound = true;
-                    passwordTextHandler(providedUsername);
+                    passwordTextHandler(providedUsername, timestamp);
                 }
             }
             if (!nameFound) {
@@ -53,13 +62,21 @@ public class LoginScreen implements Initializable {
                 usernameAlert.setTitle("Incorrect Username");
                 usernameAlert.setContentText("Username provided not found.");
                 usernameAlert.showAndWait();
+                try {
+                    FileWriter writer = new FileWriter(loginLogs, true);
+                    writer.write("Login Failed with\nUsername: " + providedUsername + "\nPassword: " + pass +
+                            "\nDate/Time: " + timestamp.atZone(ZoneId.systemDefault()) + "\n\n");
+                    writer.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
     }
 
-    public void passwordTextHandler(String username) {
+    public void passwordTextHandler(String username, LocalDateTime timestamp) {
         try {
             Connection conn = DBConnection.getConn();
             boolean passFound = false;
@@ -78,6 +95,10 @@ public class LoginScreen implements Initializable {
                         appStage.setTitle("Appointment Screen");
                         appStage.setScene(new Scene(root));
                         appStage.show();
+                        FileWriter writer = new FileWriter(loginLogs, true);
+                        writer.write("Login Successful with\nUsername: " + username + "\nPassword: " + providedPassword +
+                                "\nDate/Time: " + timestamp.atZone(ZoneId.systemDefault()) + "\n\n");
+                        writer.close();
                     } catch (IOException ioe){
                         ioe.printStackTrace();
                     }
@@ -88,6 +109,14 @@ public class LoginScreen implements Initializable {
                 passwordAlert.setTitle("Incorrect Password");
                 passwordAlert.setContentText("Password provided not found.");
                 passwordAlert.showAndWait();
+                try {
+                    FileWriter writer = new FileWriter(loginLogs, true);
+                    writer.write("Login Failed with\nUsername: " + username + "\nPassword: " + providedPassword +
+                            "\nDate/Time: " + timestamp.atZone(ZoneId.systemDefault()) + "\n\n");
+                    writer.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
