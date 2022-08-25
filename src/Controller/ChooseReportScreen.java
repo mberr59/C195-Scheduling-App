@@ -34,7 +34,8 @@ public class ChooseReportScreen {
         try {
             Connection conn = DBConnection.getConn();
             ArrayList<String> appType = new ArrayList<>();
-            PreparedStatement customerStatement = conn.prepareStatement(QueryExecutions.getSelectAppointmentQuery());
+            PreparedStatement customerStatement = conn.prepareStatement(QueryExecutions.getSelectAppointmentQuery(),
+                    ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet customerRS = customerStatement.executeQuery();
             while (customerRS.next()) {
                 String type = customerRS.getString("Type");
@@ -43,27 +44,27 @@ public class ChooseReportScreen {
                 }
             }
             ResultSet secondRS = customerStatement.executeQuery();
-            LocalDateTime currentYear = LocalDateTime.now();
             int totalOfType = 0;
-            int increment = 1;
-            while (secondRS.next()){
-                while (increment <= 12) {
-                    tempStringArray.add("Month of " + Month.of(increment) + ":\n");
-                    tempStringArray.add("----------------------------------\n");
-                    for (String type : appType) {
-                        if ((secondRS.getString("Type").equals(type))) {
+            int incrementMonth = 1;
+            while (incrementMonth <= 12) {
+                tempStringArray.add("Month of " + Month.of(incrementMonth) + ":\n");
+                tempStringArray.add("----------------------------------\n");
+                for (String type : appType) {
+                    while (secondRS.next()) {
+                        if ((secondRS.getString("Type").equals(type)) &&
+                                secondRS.getTimestamp("Start").toLocalDateTime().getMonth() == Month.of(incrementMonth)) {
                             totalOfType += 1;
                         }
                     }
-                        tempStringArray.add(secondRS.getString("Type") + " Total: " + totalOfType + "\n");
-                        tempStringArray.add("------------------------\n");
-                        totalOfType = 0;
-                        customerAppByType.addAll(tempStringArray);
-                        tempStringArray.clear();
-                    increment += 1;
+                    tempStringArray.add(type + " Total: " + totalOfType + "\n");
+                    tempStringArray.add(".............................\n");
+                    totalOfType = 0;
+                    secondRS.beforeFirst();
                 }
-                currentYear = currentYear.plus(1, ChronoUnit.YEARS);
+                incrementMonth += 1;
             }
+                customerAppByType.addAll(tempStringArray);
+                tempStringArray.clear();
 
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/ReportScreen.fxml")));
             Parent root = loader.load();
