@@ -42,7 +42,7 @@ public class AppointmentScreen implements Initializable {
     public Button modAppointment;
     public RadioButton byMonthRadio;
     public RadioButton byWeekRadio;
-    public ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+    public final ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
     public LocalDateTime startDateTime;
     public Button appFilter;
     public ToggleGroup filterGroup;
@@ -130,8 +130,8 @@ public class AppointmentScreen implements Initializable {
     }
 
     public void refreshTableHandler() {
-        appointmentTable.getItems().removeAll(appointmentList);
-        appointmentData.poplateData();
+            appointmentTable.getItems().clear();
+            appointmentData.poplateData();
     }
 
     public void modAppointmentHandler() {
@@ -156,11 +156,11 @@ public class AppointmentScreen implements Initializable {
     }
 
     public void byMonthHandler() {
+        ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
         int todayDateMonth = LocalDateTime.now().getMonth().getValue();
         int todayDateYear = LocalDateTime.now().getYear();
         int n = 0;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh':'mm a");
-        ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
         for (Appointment app: appointmentList) {
             LocalDateTime appointmentDT = LocalDateTime.parse(appointmentList.get(n).getStartString(), dateTimeFormatter);
             int appointmentMonth = appointmentDT.getMonth().getValue();
@@ -172,8 +172,9 @@ public class AppointmentScreen implements Initializable {
             }
             n += 1;
         }
-        appointmentTable.getItems().removeAll(appointmentList);
+        appointmentTable.getItems().clear();
         appointmentTable.setItems(monthlyAppointments);
+
     }
 
     public void byWeekHandler() {
@@ -209,9 +210,9 @@ public class AppointmentScreen implements Initializable {
                 }
                 n += 1;
             }
-            appointmentTable.getItems().removeAll(appointmentList);
-            appointmentTable.setItems(weeklyAppointments);
+            appointmentTable.getItems().clear();
         }
+        appointmentTable.setItems(weeklyAppointments);
         }
 
     public void appFilterHandler() {

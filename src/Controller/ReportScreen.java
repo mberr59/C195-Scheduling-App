@@ -18,7 +18,7 @@ public class ReportScreen {
         stage.close();
     }
 
-    public void showCustomerReport(File report) {
+    public void showReport(File report) {
         try {
             Scanner scanner = new Scanner(new File(String.valueOf(report))).useDelimiter("----------------------");
             while (scanner.hasNext()){

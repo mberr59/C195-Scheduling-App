@@ -27,6 +27,8 @@ public abstract class QueryExecutions {
 
     public static String getDivisionName() { return "SELECT Division FROM first_level_divisions WHERE Division_ID = ?"; }
 
+    public static String getAllContacts() { return "SELECT * FROM contacts"; }
+
     public static String getContactsName() { return "SELECT Contact_Name FROM contacts"; }
 
     public static String getContactID() { return "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?"; }
@@ -67,4 +69,6 @@ public abstract class QueryExecutions {
     public static String getUsernames() { return "SELECT User_Name FROM users"; }
 
     public static String getPassword() { return "SELECT Password FROM users WHERE User_Name = ?"; }
+
+    public static String getAppointmentByContactID() { return "SELECT * FROM appointments WHERE Contact_ID = ?"; }
 }
