@@ -8,15 +8,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -25,19 +24,71 @@ public class ChooseReportScreen {
     public Button contactRep;
     public Button ftcApp;
     public Button repClose;
-    private final File contactFile = new File("C:\\Users\\micah\\Logs\\ContactReport.txt");
-    private final File customerAppFile = new File("C:\\Users\\micah\\Logs\\CustomerAppReport.txt");
-    private final File customerNewFile = new File("C:\\Users\\micah\\Logs\\NewCustomerReport.txt");
+    public ArrayList<String> tempStringArray = new ArrayList<>();
+    public ArrayList<String> contactAppTotal = new ArrayList<>();
+    public ArrayList<String> contactAppByContact = new ArrayList<>();
+    public ArrayList<String> customerAppByType = new ArrayList<>();
 
 
     public void custAppRepHandler() {
+        try {
+            Connection conn = DBConnection.getConn();
+            ArrayList<String> appType = new ArrayList<>();
+            PreparedStatement customerStatement = conn.prepareStatement(QueryExecutions.getSelectAppointmentQuery());
+            ResultSet customerRS = customerStatement.executeQuery();
+            while (customerRS.next()) {
+                String type = customerRS.getString("Type");
+                if (!appType.contains(type)) {
+                    appType.add(type);
+                }
+            }
+            ResultSet secondRS = customerStatement.executeQuery();
+            LocalDateTime currentYear = LocalDateTime.now();
+            int totalOfType = 0;
+            int increment = 1;
+            while (secondRS.next()){
+                while (increment <= 12) {
+                    tempStringArray.add("Month of " + Month.of(increment) + ":\n");
+                    tempStringArray.add("----------------------------------\n");
+                    for (String type : appType) {
+                        if ((secondRS.getString("Type").equals(type))) {
+                            totalOfType += 1;
+                        }
+                    }
+                        tempStringArray.add(secondRS.getString("Type") + " Total: " + totalOfType + "\n");
+                        tempStringArray.add("------------------------\n");
+                        totalOfType = 0;
+                        customerAppByType.addAll(tempStringArray);
+                        tempStringArray.clear();
+                    increment += 1;
+                }
+                currentYear = currentYear.plus(1, ChronoUnit.YEARS);
+            }
+
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/ReportScreen.fxml")));
+            Parent root = loader.load();
+            ReportScreen reportScreen = loader.getController();
+            for (String entry:customerAppByType) {
+                reportScreen.reportTF.appendText(entry);
+            }
+            Stage reportStage = new Stage();
+            reportStage.setTitle("Contact Report");
+            reportStage.setScene(new Scene(root));
+            reportStage.show();
+
+        } catch (SQLException | IOException exception) {
+            exception.printStackTrace();
+        }
 
     }
 
     public void contactRepHandler() {
+
+    }
+
+    public void allAppHandler() {
         try {
             Connection conn = DBConnection.getConn();
-            FileWriter writer = new FileWriter(contactFile);
             ArrayList<Integer> contacts = new ArrayList<>();
             PreparedStatement contactStatement = conn.prepareStatement(QueryExecutions.getSelectAppointmentQuery());
             ResultSet contactRS = contactStatement.executeQuery();
@@ -50,45 +101,48 @@ public class ChooseReportScreen {
             PreparedStatement contactInfo = conn.prepareStatement(QueryExecutions.getAllContacts());
             ResultSet contactInfoRS = contactInfo.executeQuery();
             while (contactInfoRS.next()) {
-                    String contactName = contactInfoRS.getString("Contact_Name");
-                    int contactID = contactInfoRS.getInt("Contact_ID");
-                    writer.write(".............................................................\n");
-                    writer.write("CONTACT: " + contactName + " SCHEDULE\n");
-                    PreparedStatement contactSchedule = conn.prepareStatement(QueryExecutions.getAppointmentByContactID());
-                    contactSchedule.setInt(1, contactID);
-                    ResultSet contactScheduleData = contactSchedule.executeQuery();
-                    while (contactScheduleData.next()) {
-                        if (contactScheduleData.getInt("Contact_ID") == contactID) {
-                            int contactAppID = contactScheduleData.getInt("Appointment_ID");
-                            String contactAppTitle = contactScheduleData.getString("Title");
-                            String contactAppType = contactScheduleData.getString("Type");
-                            String contactAppDesc = contactScheduleData.getString("Description");
-                            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
-                            LocalDateTime contactAppStart = contactScheduleData.getTimestamp("Start").toLocalDateTime();
-                            ZonedDateTime zonedStart = contactAppStart.atZone(ZoneId.systemDefault());
-                            LocalDateTime convertedAppStart = zonedStart.toLocalDateTime();
-                            LocalDateTime contactAppEnd = contactScheduleData.getTimestamp("End").toLocalDateTime();
-                            ZonedDateTime zonedEnd = contactAppEnd.atZone(ZoneId.systemDefault());
-                            LocalDateTime convertedAppEnd = zonedEnd.toLocalDateTime();
-                            int contactAppCustomerID = contactScheduleData.getInt("Customer_ID");
-                            writer.write("-------------------------------------------\n");
-                            writer.write("Appointment ID: " + contactAppID + "\n");
-                            writer.write("Title: " + contactAppTitle + "\n");
-                            writer.write("Type: " + contactAppType + "\n");
-                            writer.write("Description: " + contactAppDesc + "\n");
-                            writer.write("Start Date: " + convertedAppStart.toLocalDate() + "\n");
-                            writer.write("Start Time: " + dateTimeFormatter.format(convertedAppStart.toLocalTime()) + "\n");
-                            writer.write("End Date: " + convertedAppEnd.toLocalDate() + "\n");
-                            writer.write("End Time: " + dateTimeFormatter.format(contactAppEnd.toLocalTime()) + "\n");
-                            writer.write("Customer ID: " + contactAppCustomerID + "\n");
+                String contactName = contactInfoRS.getString("Contact_Name");
+                int contactID = contactInfoRS.getInt("Contact_ID");
+                tempStringArray.add(".............................................................\n");
+                tempStringArray.add("CONTACT: " + contactName + " SCHEDULE\n");
+                PreparedStatement contactSchedule = conn.prepareStatement(QueryExecutions.getAppointmentByContactID());
+                contactSchedule.setInt(1, contactID);
+                ResultSet contactScheduleData = contactSchedule.executeQuery();
+                while (contactScheduleData.next()) {
+                    if (contactScheduleData.getInt("Contact_ID") == contactID) {
+                        int contactAppID = contactScheduleData.getInt("Appointment_ID");
+                        String contactAppTitle = contactScheduleData.getString("Title");
+                        String contactAppType = contactScheduleData.getString("Type");
+                        String contactAppDesc = contactScheduleData.getString("Description");
+                        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+                        LocalDateTime contactAppStart = contactScheduleData.getTimestamp("Start").toLocalDateTime();
+                        ZonedDateTime zonedStart = contactAppStart.atZone(ZoneId.systemDefault());
+                        LocalDateTime convertedAppStart = zonedStart.toLocalDateTime();
+                        LocalDateTime contactAppEnd = contactScheduleData.getTimestamp("End").toLocalDateTime();
+                        ZonedDateTime zonedEnd = contactAppEnd.atZone(ZoneId.systemDefault());
+                        LocalDateTime convertedAppEnd = zonedEnd.toLocalDateTime();
+                        int contactAppCustomerID = contactScheduleData.getInt("Customer_ID");
+                        tempStringArray.add("-------------------------------------------\n");
+                        tempStringArray.add("Appointment ID: " + contactAppID + "\n");
+                        tempStringArray.add("Title: " + contactAppTitle + "\n");
+                        tempStringArray.add("Type: " + contactAppType + "\n");
+                        tempStringArray.add("Description: " + contactAppDesc + "\n");
+                        tempStringArray.add("Start Date: " + convertedAppStart.toLocalDate() + "\n");
+                        tempStringArray.add("Start Time: " + dateTimeFormatter.format(convertedAppStart.toLocalTime()) + "\n");
+                        tempStringArray.add("End Date: " + convertedAppEnd.toLocalDate() + "\n");
+                        tempStringArray.add("End Time: " + dateTimeFormatter.format(contactAppEnd.toLocalTime()) + "\n");
+                        tempStringArray.add("Customer ID: " + contactAppCustomerID + "\n");
                     }
+                    contactAppTotal.addAll(tempStringArray);
+                    tempStringArray.clear();
                 }
             }
-            writer.close();
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/ReportScreen.fxml")));
             Parent root = loader.load();
             ReportScreen reportScreen = loader.getController();
-            reportScreen.showReport(contactFile);
+            for (String entry:contactAppTotal) {
+                reportScreen.reportTF.appendText(entry);
+            }
             Stage reportStage = new Stage();
             reportStage.setTitle("Contact Report");
             reportStage.setScene(new Scene(root));
@@ -96,9 +150,6 @@ public class ChooseReportScreen {
         } catch (IOException | SQLException exception) {
             exception.printStackTrace();
         }
-    }
-
-    public void ftcAppHandler() {
     }
 
     public void repCloseHandler() {

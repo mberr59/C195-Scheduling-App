@@ -130,9 +130,15 @@ public class AppointmentScreen implements Initializable {
     }
 
     public void refreshTableHandler() {
+        int increment = 0;
+        while (increment <= 2) {
             appointmentTable.refresh();
             appointmentTable.getItems().clear();
+            appointmentTable.setItems(appointmentList);
             appointmentData.poplateData();
+            increment += 1;
+        }
+
     }
 
     public void modAppointmentHandler() {

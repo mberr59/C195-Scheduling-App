@@ -4,25 +4,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChooseReportScreen">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ChooseReportScreen">
     <Label layoutX="241.0" layoutY="31.0" text="Choose Report" textFill="#265fad">
         <font>
-          <Font size="18.0"/>
+          <Font size="18.0" />
         </font>
     </Label>
-    <Label layoutX="93.0" layoutY="119.0" prefHeight="18.0" prefWidth="366.0"
-           text="Customer Appointments -----------------------------------------------"/>
-    <Label layoutX="93.0" layoutY="182.0" prefHeight="18.0" prefWidth="366.0"
-           text="Contact Schedule -------------------------------------------------------"/>
-    <Label layoutX="93.0" layoutY="248.0" prefHeight="18.0" prefWidth="365.0"
-           text="First Time Customer Appointment -------------------------------------"/>
-    <Button fx:id="custAppRep" layoutX="462.0" layoutY="115.0" mnemonicParsing="false" onAction="#custAppRepHandler"
-            text="Generate"/>
-    <Button fx:id="contactRep" layoutX="462.0" layoutY="178.0" mnemonicParsing="false" onAction="#contactRepHandler"
-            text="Generate"/>
-    <Button fx:id="ftcApp" layoutX="462.0" layoutY="244.0" mnemonicParsing="false" onAction="#ftcAppHandler"
-            text="Generate"/>
-    <Button fx:id="repClose" layoutX="274.0" layoutY="331.0" mnemonicParsing="false" onAction="#repCloseHandler"
-            text="Close"/>
+    <Label layoutX="93.0" layoutY="119.0" prefHeight="18.0" prefWidth="366.0" text="Customer Appointments -----------------------------------------------" />
+    <Label layoutX="93.0" layoutY="182.0" prefHeight="18.0" prefWidth="366.0" text="Contact Schedule -------------------------------------------------------" />
+    <Label layoutX="93.0" layoutY="248.0" prefHeight="18.0" prefWidth="365.0" text="All Appointments by Contact ------------------------------------------" />
+    <Button fx:id="custAppRep" layoutX="462.0" layoutY="115.0" mnemonicParsing="false" onAction="#custAppRepHandler" text="Generate" />
+    <Button fx:id="contactRep" layoutX="462.0" layoutY="178.0" mnemonicParsing="false" onAction="#contactRepHandler" text="Generate" />
+    <Button fx:id="ftcApp" layoutX="462.0" layoutY="244.0" mnemonicParsing="false" onAction="#allAppHandler" text="Generate" />
+    <Button fx:id="repClose" layoutX="274.0" layoutY="331.0" mnemonicParsing="false" onAction="#repCloseHandler" text="Close" />
 </AnchorPane>
