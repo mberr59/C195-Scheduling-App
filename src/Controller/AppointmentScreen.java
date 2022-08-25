@@ -130,6 +130,7 @@ public class AppointmentScreen implements Initializable {
     }
 
     public void refreshTableHandler() {
+            appointmentTable.refresh();
             appointmentTable.getItems().clear();
             appointmentData.poplateData();
     }
@@ -172,7 +173,6 @@ public class AppointmentScreen implements Initializable {
             }
             n += 1;
         }
-        appointmentTable.getItems().clear();
         appointmentTable.setItems(monthlyAppointments);
 
     }
@@ -210,12 +210,12 @@ public class AppointmentScreen implements Initializable {
                 }
                 n += 1;
             }
-            appointmentTable.getItems().clear();
         }
         appointmentTable.setItems(weeklyAppointments);
         }
 
     public void appFilterHandler() {
+        appointmentTable.setItems(appointmentList);
         if (byMonthRadio.isSelected()) {
             byMonthHandler();
         } else if (byWeekRadio.isSelected()) {
