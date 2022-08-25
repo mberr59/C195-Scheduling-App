@@ -38,12 +38,8 @@ public class LoginScreen implements Initializable {
     public Locale userLocale = Locale.getDefault();
     public Alert usernameAlert = new Alert(Alert.AlertType.ERROR);
     public Alert passwordAlert = new Alert(Alert.AlertType.ERROR);
-
     private final ZoneId z = ZoneId.systemDefault();
-    // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // TODO Change this path to root folder of project before submitting!
-    private final File loginLogs = new File("C:\\Users\\Micah\\Logs\\login_activity.txt");
-    // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    private final File loginLogs = new File("C:\\Users\\micah\\IdeaProjects\\C195-Scheduling-App\\login-activity.txt");
 
     public void userNameTextHandler() {
         String pass = passwordText.getText();
