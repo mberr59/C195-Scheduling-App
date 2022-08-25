@@ -28,6 +28,9 @@ public class ChooseReportScreen {
     public ArrayList<String> customerAppByType = new ArrayList<>();
 
 
+    /**
+     * Customer Appointment Report Handler.
+     */
     public void custAppRepHandler() {
         try {
             Connection conn = DBConnection.getConn();
