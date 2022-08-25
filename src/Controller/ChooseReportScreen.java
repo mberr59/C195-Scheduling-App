@@ -15,7 +15,6 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -26,7 +25,6 @@ public class ChooseReportScreen {
     public Button repClose;
     public ArrayList<String> tempStringArray = new ArrayList<>();
     public ArrayList<String> contactAppTotal = new ArrayList<>();
-    public ArrayList<String> contactAppByContact = new ArrayList<>();
     public ArrayList<String> customerAppByType = new ArrayList<>();
 
 
@@ -84,7 +82,16 @@ public class ChooseReportScreen {
     }
 
     public void contactRepHandler() {
-
+        try {
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/ContactSelectScreen.fxml")));
+            Parent root = loader.load();
+            Stage reportStage = new Stage();
+            reportStage.setTitle("Contact Report");
+            reportStage.setScene(new Scene(root));
+            reportStage.show();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public void allAppHandler() {

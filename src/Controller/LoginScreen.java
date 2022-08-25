@@ -107,6 +107,8 @@ public class LoginScreen implements Initializable {
                         Parent root = loader.load();
 
                         AppointmentScreen checkApp = loader.getController();
+                        checkApp.loginID = userIDRS.getInt("User_ID");
+                        checkApp.loadAppointments(userIDRS.getInt("User_ID"));
                         checkApp.checkAppointmentTimes(userIDRS.getInt("User_ID"));
                         Stage appStage = new Stage();
                         appStage.setTitle("Appointment Screen");

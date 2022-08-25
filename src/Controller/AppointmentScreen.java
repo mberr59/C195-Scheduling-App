@@ -1,7 +1,6 @@
 package Controller;
 
 import Helper.DBConnection;
-import Helper.PopulateData;
 import Helper.QueryExecutions;
 import Model.Appointment;
 import javafx.collections.FXCollections;
@@ -49,15 +48,54 @@ public class AppointmentScreen implements Initializable {
     public Button appDelete;
     public Button appExit;
     public Button appReports;
+    public int loginID;
 
-    // Lambda Expression 7. Creates a PopulateData Interface and passes the appointment data to the Interface using
-    // a Lambda Expression block.
-    PopulateData appointmentData = () -> {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) { loadAppointments(loginID); }
+
+    public void customerListButtonHandler() {
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/CustomerScreen.fxml")));
+            Stage appStage = new Stage();
+            appStage.setTitle("Customer Screen");
+            appStage.setScene(new Scene(root));
+            appStage.show();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+    }
+
+    public void addAppointmentHandler() {
+        Parent root;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AddAppointmentScreen.fxml")));
+            Stage appStage = new Stage();
+            appStage.setTitle("Add Appointment");
+            appStage.setScene(new Scene(root));
+            appStage.show();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+    }
+
+    public void refreshTableHandler() {
+        int increment = 0;
+        while (increment <= 2) {
+            appointmentTable.refresh();
+            appointmentTable.getItems().clear();
+            loadAppointments(loginID);
+            increment += 1;
+        }
+
+    }
+
+    public void loadAppointments(int loginID) {
         try {
             Connection conn = DBConnection.getConn();
-            String query = QueryExecutions.getSelectAppointmentQuery();
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
+            PreparedStatement appST = conn.prepareStatement(QueryExecutions.getAppByUser());
+            appST.setInt(1, loginID);
+            ResultSet rs = appST.executeQuery();
 
             while (rs.next()) {
 
@@ -98,47 +136,6 @@ public class AppointmentScreen implements Initializable {
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
-    };
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) { appointmentData.poplateData(); }
-
-    public void customerListButtonHandler() {
-        Parent root;
-        try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/CustomerScreen.fxml")));
-            Stage appStage = new Stage();
-            appStage.setTitle("Customer Screen");
-            appStage.setScene(new Scene(root));
-            appStage.show();
-        } catch (IOException ioe){
-            ioe.printStackTrace();
-        }
-    }
-
-    public void addAppointmentHandler() {
-        Parent root;
-        try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/View/AddAppointmentScreen.fxml")));
-            Stage appStage = new Stage();
-            appStage.setTitle("Add Appointment");
-            appStage.setScene(new Scene(root));
-            appStage.show();
-        } catch (IOException ioe){
-            ioe.printStackTrace();
-        }
-    }
-
-    public void refreshTableHandler() {
-        int increment = 0;
-        while (increment <= 2) {
-            appointmentTable.refresh();
-            appointmentTable.getItems().clear();
-            appointmentTable.setItems(appointmentList);
-            appointmentData.poplateData();
-            increment += 1;
-        }
-
     }
 
     public void modAppointmentHandler() {
