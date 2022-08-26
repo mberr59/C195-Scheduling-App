@@ -44,7 +44,7 @@ public class LoginScreen implements Initializable {
     public Alert usernameAlert = new Alert(Alert.AlertType.ERROR);
     public Alert passwordAlert = new Alert(Alert.AlertType.ERROR);
     private final ZoneId z = ZoneId.systemDefault();
-    private final File loginLogs = new File("C:\\Users\\micah\\IdeaProjects\\C195-Scheduling-App\\login-activity.txt");
+    private final File loginLogs = new File("C:\\Users\\LabUser\\IdeaProjects\\C195-Scheduling-App\\login-activity.txt");
 
     /**
      * Username Check Handler. Takes the entered username and checks the database to see if the username exists. If French
@@ -171,6 +171,7 @@ public class LoginScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("Initialized");
+
         zoneLabel.setText("Zone: " + z.getId());
         localeCheck(userLocale);
     }
@@ -178,7 +179,7 @@ public class LoginScreen implements Initializable {
     /**
      * Locale Check method. This method checks the system default locale. If the locale returns a French language. The
      * login screen is translated to French.
-     * @param locale
+     * @param locale Locale is passed to the method to check if the locale language is French.
      */
     public void localeCheck (Locale locale) {
         if (locale.getLanguage().equals("fr")){

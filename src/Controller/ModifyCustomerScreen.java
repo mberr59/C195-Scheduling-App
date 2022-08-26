@@ -4,6 +4,7 @@ import Helper.DBConnection;
 import Helper.QueryExecutions;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -138,6 +139,16 @@ public class ModifyCustomerScreen {
 
         } catch (SQLException sqlException){
             sqlException.printStackTrace();
+        } catch (NumberFormatException numberFormatException) {
+            Alert nfeAlert = new Alert(Alert.AlertType.ERROR);
+            nfeAlert.setTitle("Numeric Error");
+            nfeAlert.setContentText("Please enter a valid User ID and Customer ID");
+            return;
+        } catch (NullPointerException npe) {
+            Alert npeAlert = new Alert(Alert.AlertType.ERROR);
+            npeAlert.setTitle("Input Error");
+            npeAlert.setContentText("Error n entered data. Please check data provided.");
+            return;
         }
     }
 }

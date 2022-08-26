@@ -28,6 +28,11 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This class is designed to give the user the option to select a contact to view their appointment schedule
+ * Controller class for Contact Select fxml.
+ * Lambda Expression 7. Uses a Lambda Expression to call the Populate Data Interface to populate the contact ComboBox.
+ */
 public class ContactSelectScreen implements Initializable {
     public Button selectButton;
     public ComboBox<String> contactCB;
@@ -52,7 +57,11 @@ public class ContactSelectScreen implements Initializable {
     };
 
 
-
+    /**
+     * Select Button Handler. This method takes in the selected contact from the ComboBox and loops through all
+     * appointments to grab all appointments that match the Contact ID of the selected contact. Creates a report and
+     * passes the data to the Report screen.
+     */
     public void selectButtonHandler() {
         try {
             if (!contactCB.getSelectionModel().isEmpty()) {

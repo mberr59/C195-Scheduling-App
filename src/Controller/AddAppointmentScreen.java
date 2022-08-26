@@ -13,6 +13,11 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+
+/**
+ * This is the Add Appointment screen controller. This class is responsible for all of the logic
+ * for taking in user input, validating the data then adding the data to the database.
+ */
 public class AddAppointmentScreen implements Initializable {
     public TextField addAppTitle;
     public TextField addAppDesc;
@@ -28,8 +33,10 @@ public class AddAppointmentScreen implements Initializable {
     public ComboBox<LocalTime> addAppStartTime;
     public ComboBox<LocalTime> addAppEndTime;
 
-    // Lambda expression 3. Creates a ConvertDateTime Interface. A timestamp object is passed to the method and then
-    // is converted to EST. The converted timestamp is then returned.
+    /**
+     * Lambda expression 3. Creates a ConvertDateTime Interface. A timestamp object is passed to the method and then
+     * is converted to EST. The converted timestamp is then returned.
+     */
     ConvertDateTime timestampConversion = (timestamp) -> {
         LocalDateTime localDT = timestamp.toLocalDateTime();
         ZonedDateTime zonedDT = localDT.atZone(ZoneId.systemDefault());
@@ -38,8 +45,10 @@ public class AddAppointmentScreen implements Initializable {
         return Timestamp.valueOf(convertedLDT);
     };
 
-    // Lambda expression 2. Creates a PopulateData Interface and passes instructions to add the Appointment data
-    // to the proper fields using a Lambda expression.
+    /**
+     * Lambda expression 2. Creates a PopulateData Interface and passes instructions to add the Appointment data
+     * to the proper fields using a Lambda expression.
+     */
     PopulateData addAppData = () -> {
         ObservableList<String> addAppContactList = FXCollections.observableArrayList();
         ObservableList<LocalTime> addAppTimeList = FXCollections.observableArrayList();
@@ -81,6 +90,15 @@ public class AddAppointmentScreen implements Initializable {
         addAppData.poplateData();
     }
 
+    /**
+     * Add Appointment Save Button Handler. This method takes in all data provided by the user and tries to add the
+     * data into the database provided it passes the validation checks. Contains the following Lambda expression:
+     * Lambda expression 1. Creates a ValidateDateTime boolean Interface. Passing an Instant object to the
+     * Interface, then checking the date to confirm it is a weekday also checking the time is 8am to 10pm EST through
+     * a Lambda expression.
+     *
+     *
+     */
     public void addAppSaveHandler() {
         Connection conn = DBConnection.getConn();
         String appTitle = addAppTitle.getText();
@@ -97,9 +115,6 @@ public class AddAppointmentScreen implements Initializable {
         int appAddCustomerID = Integer.parseInt(addAppCustomerID.getText());
         int appAddUserID = Integer.parseInt(addAppUserID.getText());
 
-        // Lambda expression 1. Creates a ValidateDateTime boolean Interface. Passing an Instant object to the
-        // Interface, then checking the date to confirm it is a weekday also checking the time is 8am to 10pm EST through
-        // a Lambda expression.
         ValidateDateTime isValidAddDT = (instant) -> {
             ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
             ZonedDateTime eastDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("America/New_York"));
@@ -156,6 +171,14 @@ public class AddAppointmentScreen implements Initializable {
 
                     } catch (SQLException sqlException) {
                         sqlException.printStackTrace();
+                    } catch (NumberFormatException numberFormatException) {
+                        Alert nfeAlert = new Alert(Alert.AlertType.ERROR);
+                        nfeAlert.setTitle("Numeric Error");
+                        nfeAlert.setContentText("Please enter a valid User ID and Customer ID");
+                    } catch (NullPointerException npe) {
+                        Alert npeAlert = new Alert(Alert.AlertType.ERROR);
+                        npeAlert.setTitle("Input Error");
+                        npeAlert.setContentText("Error n entered data. Please check data provided.");
                     }
                 } else {
                     Alert startAfterEnd = new Alert(Alert.AlertType.ERROR);
@@ -167,17 +190,37 @@ public class AddAppointmentScreen implements Initializable {
         }
     }
 
+    /**
+     * Add Appointment Cancel Handler. Closes the Add Appointment screen.
+     */
     public void addAppCancelHandler() {
         Stage stage = (Stage) addAppCancel.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Set Date and Time Format. Takes in the passed in Date and Time from the user and converts it to a LocalDateTime
+     * then to a Timestamp. Also sets the format of the returned timestamp.
+     * @param date Date provided from the user in the DatePicker
+     * @param time Time provided from the user in the Time ComboBox
+     * @return Returns the created Timestamp back to the calling method to use in adding to the database.
+     */
     public Timestamp setDateTimeFormat(LocalDate date, LocalTime time) {
         DateTimeFormatter sdfForTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime formattedDateTime = LocalDateTime.of(date, time);
         return Timestamp.valueOf(formattedDateTime.format(sdfForTimestamp));
     }
 
+    /**
+     * Check for Overlap method. Checks the passed startTime and endTime timestamps to confirm that there is no overlap
+     * between them before adding them to the appointment table. Also takes in the Customer ID to get the timestamps of
+     * each appointment that the customer has to make sure there is no overlap.
+     * @param c_ID Customer ID used to get all appointments of customer.
+     * @param startTime This is the startTime that the user entered.
+     * @param endTime This is the endTime that the user entered.
+     * @return Returns a boolean overlapDetected. If false the data is added to the server. If true the program is halted
+     * until the user enters data again.
+     */
     public boolean checkForOverlap(int c_ID, Timestamp startTime, Timestamp endTime) {
         boolean overlapDetected = false;
         try {
