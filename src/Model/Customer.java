@@ -1,5 +1,8 @@
 package Model;
 
+/**
+ * This class holds the constructor for the Customer objects with all the necessary getters and setters.
+ */
 public class Customer {
 
     private int id;
@@ -9,6 +12,15 @@ public class Customer {
     private String phone;
     private String divisionName;
 
+    /**
+     * Constructor for Customer object.
+     * @param id Customer ID
+     * @param name Customer Name
+     * @param address Customer Address
+     * @param postal Customer postal code
+     * @param phone Customer phone number
+     * @param divisionName Customer First-level division name
+     */
     public Customer (int id, String name, String address, String postal, String phone, String divisionName){
         setId(id);
         setName(name);

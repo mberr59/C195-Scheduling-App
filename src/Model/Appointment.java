@@ -2,6 +2,9 @@ package Model;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class holds the Appointment object constructors and all of its necessary getters and setters.
+ */
 public class Appointment {
     private int appointmentID;
     private String title;
@@ -17,7 +20,20 @@ public class Appointment {
     private int userID;
     private int contactID;
 
-
+    /**
+     * Constructor for Appointment object with LocalDateTime start and end values.
+     * @param appointmentID Appointment's Id
+     * @param title Appointment's Title
+     * @param description Appointment's Description
+     * @param location Appointment's Location
+     * @param contactName Appointment's Contact Name
+     * @param type Appointment's Type
+     * @param start Appointment's start time in LocalDateTime
+     * @param end Appointment's end time in LocalDateTime
+     * @param customerID Appointment's customer ID
+     * @param userID Appointment's user ID
+     * @param contactID Appointment's contact ID
+     */
     public Appointment(int appointmentID, String title, String description, String location, String contactName, String type,
                        LocalDateTime start, LocalDateTime end, int customerID, int userID, int contactID) {
         setAppointmentID(appointmentID);
@@ -33,6 +49,20 @@ public class Appointment {
         setContactID(contactID);
     }
 
+    /**
+     * Constructor for Appointment object with String start and end values.
+     * @param appointmentID Appointment's Id
+     * @param title Appointment's Title
+     * @param description Appointment's Description
+     * @param location Appointment's Location
+     * @param contactName Appointment's Contact Name
+     * @param type Appointment's Type
+     * @param startString Appointment's start time in String
+     * @param endString Appointment's end time in String
+     * @param customerID Appointment's customer ID
+     * @param userID Appointment's user ID
+     * @param contactID Appointment's contact ID
+     */
     public Appointment(int appointmentID, String title, String description, String location, String contactName, String type,
                        String startString, String endString, int customerID, int userID, int contactID) {
         setAppointmentID(appointmentID);
