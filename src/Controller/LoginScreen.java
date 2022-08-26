@@ -27,6 +27,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This class is the Login screen controller. It houses the logic to first compare the username to the data in the database
+ * then compares the password if a matching username is found. Also houses the method to check the locale of the system.
+ * If the locale returns French for the language the login screen and the errors are translated.
+ */
 public class LoginScreen implements Initializable {
     public TextField userNameText;
     public TextField passwordText;
@@ -41,6 +46,10 @@ public class LoginScreen implements Initializable {
     private final ZoneId z = ZoneId.systemDefault();
     private final File loginLogs = new File("C:\\Users\\micah\\IdeaProjects\\C195-Scheduling-App\\login-activity.txt");
 
+    /**
+     * Username Check Handler. Takes the entered username and checks the database to see if the username exists. If French
+     * is the system language, the error message is displayed in French.
+     */
     public void userNameTextHandler() {
         String pass = passwordText.getText();
         LocalDateTime timestamp = LocalDateTime.now();
@@ -82,6 +91,14 @@ public class LoginScreen implements Initializable {
         }
     }
 
+    /**
+     * Password Check Handler. Houses the logic to check the database for a matching password for the provided username.
+     * Takes in the username and timestamp for the creation of the log file entry. If the locale is French, it returns the
+     * error message in French.
+     * @param username The username is taken in to create the log file and also to load in the necessary appointments on
+     *                 the appointment screen.
+     * @param timestamp The timestamp is taken in to provide a timestamp for the login attempt in the login file.
+     */
     public void passwordTextHandler(String username, LocalDateTime timestamp) {
         try {
             Connection conn = DBConnection.getConn();
@@ -144,6 +161,9 @@ public class LoginScreen implements Initializable {
         }
     }
 
+    /**
+     * Login Button Handler. Calls the Username Check Handler method to start the username/password checking process.
+     */
     public void loginButtonHandler() {
         userNameTextHandler();
     }
@@ -155,6 +175,11 @@ public class LoginScreen implements Initializable {
         localeCheck(userLocale);
     }
 
+    /**
+     * Locale Check method. This method checks the system default locale. If the locale returns a French language. The
+     * login screen is translated to French.
+     * @param locale
+     */
     public void localeCheck (Locale locale) {
         if (locale.getLanguage().equals("fr")){
             ResourceBundle loginLabels = ResourceBundle.getBundle("Language/Lang", locale);

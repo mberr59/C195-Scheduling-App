@@ -23,6 +23,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This class is the Appointment screen controller. This screen houses all the logic for: displaying all the appointment
+ * data, filtering the appointments by current week and month, button to open the controller screen to add appointments,
+ * passing the selected appointment to the "modify appointment" screen, button to open the customer list controller
+ * and deleting a selected appointment.
+ */
 public class AppointmentScreen implements Initializable {
     public TableView<Appointment> appointmentTable;
     public TableColumn<Appointment, Integer> appointmentID;
@@ -53,6 +59,9 @@ public class AppointmentScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { loadAppointments(loginID); }
 
+    /**
+     * Customer List Button Handler. This method opens the Customer screen controller for customer data manipulation.
+     */
     public void customerListButtonHandler() {
         Parent root;
         try {
@@ -66,6 +75,9 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
+    /**
+     * Adding Appointment Handler. This method opens the Add Appointment screen controller to add a new appointment.
+     */
     public void addAppointmentHandler() {
         Parent root;
         try {
@@ -79,6 +91,10 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
+    /**
+     * This button refreshes the information held in the appointment table to display all appointments for the logged in
+     * user. This button is used after the list has been filtered using the Monthly or Weekly radio buttons.
+     */
     public void refreshTableHandler() {
         int increment = 0;
         while (increment <= 2) {
@@ -90,6 +106,11 @@ public class AppointmentScreen implements Initializable {
 
     }
 
+    /**
+     * Load Appointments method. This method houses the logic for creating a connection to a database and pulling all the
+     * appointments for the using the passed in login ID.
+     * @param loginID This is the user's login ID that is passed to the method for collecting the correct appointments.
+     */
     public void loadAppointments(int loginID) {
         try {
             Connection conn = DBConnection.getConn();
@@ -138,6 +159,10 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
+    /**
+     * Modify Appointment Handler. This method loads the "Modify Appointment" screen and passes the selected appointment
+     * data to the screen.
+     */
     public void modAppointmentHandler() {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/ModifyAppointmentScreen.fxml")));
@@ -159,6 +184,9 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
+    /**
+     * Filter by Month Handler. This method houses the logic to filter the appointment list by current month.
+     */
     public void byMonthHandler() {
         ObservableList<Appointment> monthlyAppointments = FXCollections.observableArrayList();
         int todayDateMonth = LocalDateTime.now().getMonth().getValue();
@@ -180,6 +208,9 @@ public class AppointmentScreen implements Initializable {
 
     }
 
+    /**
+     * Filter By Weekly Handler. This method houses the logic to filter the appointment list by current week.
+     */
     public void byWeekHandler() {
         ObservableList<Appointment> weeklyAppointments = FXCollections.observableArrayList();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh':'mm a");
@@ -215,8 +246,12 @@ public class AppointmentScreen implements Initializable {
             }
         }
         appointmentTable.setItems(weeklyAppointments);
-        }
+    }
 
+    /**
+     * This button applies the necessary filter by checking to see which of the radio buttons was checked. If neither
+     * of the radio buttons are selected, an Alert is displayed saying to select a radio button.
+     */
     public void appFilterHandler() {
         appointmentTable.setItems(appointmentList);
         if (byMonthRadio.isSelected()) {
@@ -231,6 +266,10 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
+    /**
+     * Appointment Deletion Handler. This method houses the logic for deleting the selected appointment from the list
+     * and database.
+     */
     public void appDeleteHandler() {
         try {
             int appointmentID = appointmentTable.getSelectionModel().getSelectedItem().getAppointmentID();
@@ -262,11 +301,17 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
+    /**
+     * Appointment Exit Handler. This method houses the logic to close the Appointment Screen.
+     */
     public void appExitHandler() {
         Stage stage = (Stage) appExit.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Appointment Reports Handler. Houses the logic to open the "Choose Report" screen.
+     */
     public void appReportsHandler() {
         Parent root;
         try {
@@ -280,6 +325,14 @@ public class AppointmentScreen implements Initializable {
         }
     }
 
+    /**
+     * Check Appointment Times method. This method houses the logic to check if an appointment is within 15 minutes
+     * of the time the user logs in. Starting with comparing the year, and scales from there to the checking that the
+     * appTime is 15 minutes or less from the login time. Also checks to see if the appTime is the next hour. If so, it
+     * adds 60 minutes to the appTime minutes value and subtracts the login minutes value from it to see if the appointment
+     * is at the top of the hour and within 15 minutes.
+     * @param userID Method takes in the userID to get all appointments tied to that user then does the timestamp comparison.
+     */
     public void checkAppointmentTimes(int userID) {
         LocalDateTime currentTime = LocalDateTime.now();
         Alert appAlert = new Alert(Alert.AlertType.INFORMATION);

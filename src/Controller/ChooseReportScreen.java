@@ -18,6 +18,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * This class is the controller for the "Choose Report" screen. This houses all the logic for creating the reports and/or
+ * sending the report or information to another controller to process or display the information.
+ */
 public class ChooseReportScreen {
     public Button custAppRep;
     public Button contactRep;
@@ -29,7 +33,8 @@ public class ChooseReportScreen {
 
 
     /**
-     * Customer Appointment Report Handler.
+     * Customer Appointment Report Handler. This method creates the report for Customer Appointments by their
+     * Type and Month. Opens the Report Screen and passes the data to the text area.
      */
     public void custAppRepHandler() {
         try {
@@ -84,6 +89,10 @@ public class ChooseReportScreen {
 
     }
 
+    /**
+     *  Contact Report by Selection Handler. This method loads the selection fxml screen.
+     *
+     */
     public void contactRepHandler() {
         try {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/View/ContactSelectScreen.fxml")));
@@ -97,6 +106,11 @@ public class ChooseReportScreen {
         }
     }
 
+    /**
+     * All Appointments per Contact Handler. This method holds the logic for connecting to the database and pulling all
+     * appointments. It then sorts each appointment by whichever contact is assigned to that appointment then opens the
+     * Report Screen passing this information to the screen for it to be displayed.
+     */
     public void allAppHandler() {
         try {
             Connection conn = DBConnection.getConn();
@@ -163,6 +177,9 @@ public class ChooseReportScreen {
         }
     }
 
+    /**
+     * Closes the "Choose Report" screen.
+     */
     public void repCloseHandler() {
         Stage stage = (Stage) repClose.getScene().getWindow();
         stage.close();
