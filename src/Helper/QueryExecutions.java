@@ -1,6 +1,8 @@
 package Helper;
 
-
+/**
+ * Class used to store all Queries needed to manipulate data from the database.
+ */
 public abstract class QueryExecutions {
 
     //Sql SELECT query for the customers table

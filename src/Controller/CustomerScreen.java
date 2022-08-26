@@ -20,6 +20,11 @@ import java.sql.*;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * This class is the controller for the Customer screen. A list of all customers is populated in this class asl well as
+ * all the buttons to add, update, delete customers. There is also a button to refresh the data in the customer table if
+ * any of the data changes.
+ */
 public class CustomerScreen implements Initializable {
     public TableView<Customer> customerTable;
     public TableColumn<Customer,Integer> customerTableId;
