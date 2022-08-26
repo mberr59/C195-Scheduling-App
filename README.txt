@@ -13,9 +13,9 @@ README
    - Application version - 1.0
    - Date - 8/25/2022
 
-   - IDE version number - IntelliJ Community 2021.2.3
-   - JDK version - Java SE 17.0.4
-   - JavaFX version - 18.0.2 compatible with JDK version 17.0.4
+   - IDE version number - IntelliJ Community 2021.1.3
+   - JDK version - Java SE 17.0.1
+   - JavaFX version - 17.0.1 compatible with JDK version 17.0.1
 
    - User enters their username and password into the login screen and then connects. This will bring them to their
      Appointment screen showing a list of all of their appointments. They can filter the appointments by first select

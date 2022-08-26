@@ -11,6 +11,22 @@ import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * This is the controller for the "Modify Appointment" screen. It houses the logic for a user to change the information
+ * pulled in from the Appointment screen, make changes, then updates the data in the database.
+ * Also uses a Lambda expression to populate the data fields.
+ *
+ * Lambda expression 4. Creates a PopulateData Interface. Populates the contact and time combo boxes with data.
+ * I chose to use a lambda expression for most of the screens to populate data. Most of the logic is the same between
+ * screens so instead of creating a populate data method on each screen, I chose to create an Interface then used a
+ * lambda expression to call the interface passing the data through it.
+ *
+ * Lambda expression 5. Lambda expression that creates a ConvertDateTime Interface passing a Timestamp object to it.
+ * Converts the timestamp to EST then returns the converted Timestamp.
+ * The Convert Date Time Interface is the other way I used Lambda expressions. This function needs to be used at
+ * different times throughout the application so I created a Interface and pass the needed parameters through the
+ * Lambda and convert the timestamp to Eastern time within the Lambda code block.
+ */
 public class ModifyAppointmentScreen {
     public TextField modAppTitle;
     public Button modAppSave;
@@ -27,7 +43,6 @@ public class ModifyAppointmentScreen {
     public ComboBox<LocalTime> modAppEndTime;
     public TextField modAppID;
 
-    // Lambda expression 4. Creates a PopulateData Interface. Populates the contact and time combo boxes with data.
     PopulateData modAppData = () -> {
         ObservableList<String> modAppContactList = FXCollections.observableArrayList();
         ObservableList<LocalTime> addAppTimeList = FXCollections.observableArrayList();
@@ -64,8 +79,6 @@ public class ModifyAppointmentScreen {
         modAppEndTime.setItems(addAppTimeList);
     };
 
-    // Lambda expression 5. Lambda expression that creates a ConvertDateTime Interface passing a Timestamp object to it.
-    // Converts the timestamp to EST then returns the converted Timestamp.
     ConvertDateTime timestampConversion = (timestamp) -> {
         LocalDateTime localDT = timestamp.toLocalDateTime();
         ZonedDateTime zonedDT = localDT.atZone(ZoneId.systemDefault());
@@ -74,13 +87,24 @@ public class ModifyAppointmentScreen {
         return Timestamp.valueOf(convertedLDT);
     };
 
+    /**
+     * Modify Appointment Save Handler. This method calls the Updating Appointment Data when clicked.
+     */
     public void modAppSaveHandler() { updatingAppointmentData(); }
 
+    /**
+     * Modify Appointment Cancel Handler. Closes the Modify Appointment screen.
+     */
     public void modAppCancelHandler() {
         Stage stage = (Stage) modAppCancel.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Populate Appointment Fields. This method is called from the Appointment screen when this screen is being loaded
+     * It takes in the selected item from the appointment screen.
+     * @param selectedItem Appointment object passed from the selected item in the Appointment screen.
+     */
     public void populateAppFields(Appointment selectedItem) {
         try {
             modAppData.poplateData();
@@ -108,6 +132,13 @@ public class ModifyAppointmentScreen {
         }
     }
 
+    /**
+     * Updating Appointment Data. This method takes in all the data within the user fields and tries to update the item
+     * in the database with the data if the data passes validation checks.
+     *
+     * Lambda Expression 8. ValidateDateTime taking in a instant object. Converts the Time to EST and then checks if
+     * the date is Saturday or Sunday then checks if the time is between 8am to 10pm EST.
+     */
     public void updatingAppointmentData() {
         Connection connection = DBConnection.getConn();
         int appID = Integer.parseInt(modAppID.getText());
@@ -203,12 +234,31 @@ public class ModifyAppointmentScreen {
         }
     }
 
+    /**
+     * Set Date Time Format. This method takes in a LocalDate and LocalTime. It then creates a LocalDateTime using the
+     * passed parameters. Lastly returns a timestamp from the LocalDateTime in the specified pattern.
+     * @param date The LocalDate parameter passed to the function.
+     * @param time The LocalTime parameter passed to the function.
+     * @return The converted and formatted Timestamp object is returned.
+     */
     public Timestamp setDateTimeFormat(LocalDate date, LocalTime time) {
         DateTimeFormatter sdfForTimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime formattedDateTime = LocalDateTime.of(date, time);
         return Timestamp.valueOf(formattedDateTime.format(sdfForTimestamp));
     }
 
+    /**
+     * Check for Overlap. This method takes in the Customer ID, startTime Timestamp, endTime Timestamp, and the
+     * Appointment ID as parameters. Compares the passed in startTime and endTime to each appointment tied to the
+     * passed in Customer ID. Each appointment is checked to make sure that the Appointment thats ID matches the
+     * passed in App ID is skipped over in the comparisons.
+     *
+     * @param c_ID Customer ID used to get all appointments tied to this customer.
+     * @param startTime Start time of the proposed appointment.
+     * @param endTime End time of the proposed appointment.
+     * @param appID Appointment ID of the Appointment being updated.
+     * @return returns a true value if a conflict is detected.
+     */
     public boolean checkForOverlap(int c_ID, Timestamp startTime, Timestamp endTime, int appID) {
         boolean overlapDetected = false;
         try {

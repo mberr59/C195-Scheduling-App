@@ -13,6 +13,11 @@ import Model.Customer;
 
 import java.sql.*;
 
+/**
+ * This class is the controller for the Modify Customer screen. This screen is called after a user selects one of the
+ * customers in the customer list. The screen is used when a user needs to modify one of
+ * the customer's data.
+ */
 public class ModifyCustomerScreen {
     public TextField modCustIDTF;
     public TextField modCustNameTF;
@@ -24,13 +29,25 @@ public class ModifyCustomerScreen {
     public Button modCustSaveBn;
     public Button modCustCancelBn;
 
+    /**
+     * Modify Customer Save Handler. This method calls the Updating Customer Data method.
+     */
     public void modCustSaveHandler() { updatingCustomerData(); }
 
+    /**
+     * Modify Customer Cancel Handler. The method closes the screen.
+     */
     public void modCustCancelHandler() {
         Stage stage = (Stage) modCustCancelBn.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Populate Customer Fields. This method is called from the Customer screen after the user selects one of the
+     * customers and clicks the update button. Takes the data from the customer object and populates the user fields
+     * with the data.
+     * @param customer Customer object passed to the method to populate the user fields with their data.
+     */
     public void populateCustomerFields(Customer customer){
         populateCountryCB();
         modCustIDTF.setText(String.valueOf(customer.getId()));
@@ -43,6 +60,10 @@ public class ModifyCustomerScreen {
 
     }
 
+    /**
+     * Populate Country ComboBox. This method connects to the database and populates the Country ComboBox with the
+     * data found in the countries table.
+     */
     public void populateCountryCB(){
         try {
             ObservableList<String> countryData = FXCollections.observableArrayList();
@@ -63,6 +84,10 @@ public class ModifyCustomerScreen {
         }
     }
 
+    /**
+     * Populate State ComboBox. The method connects to the database and populates the First-level division ComboBox with
+     * the data found in the first-level divisions table with the matching Country_ID.
+     */
     public void populateStateCB() {
         try {
             ObservableList<String> stateData = FXCollections.observableArrayList();
@@ -89,6 +114,12 @@ public class ModifyCustomerScreen {
 
     }
 
+    /**
+     * Get Customer Country. This method uses the divisionName parameter to make a call to first-level divisions to get
+     * the Country_ID. It then uses the Country_ID to get the corresponding name in the countries table.
+     * @param divisionName first-level division name used to get the country_ID using a database call.
+     * @return The Country_Name is returned.
+     */
     private String getCustomerCountry(String divisionName) {
         String countryName = "null";
         try {
@@ -109,6 +140,10 @@ public class ModifyCustomerScreen {
         return countryName;
     }
 
+    /**
+     * Updating Customer Data. This method takes in the data that the user provided and attempts to update the database
+     * data. The data must pass the validation checks.
+     */
     public void updatingCustomerData() {
         Connection conn = DBConnection.getConn();
         int custID = Integer.parseInt(modCustIDTF.getText());

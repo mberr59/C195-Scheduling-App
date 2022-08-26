@@ -34,8 +34,10 @@ public class CustomerScreen implements Initializable {
     public Button deleteCustomerButton;
     public Button refreshDataButton;
 
-    // Lambda Expression 6. Creates a PopulateData Interface named customerData and passes the data to the Interface
-    // using a Lambda expression block.
+    /**
+     * Lambda Expression 6. Creates a PopulateData Interface named customerData and passes the data to the Interface
+     * using a Lambda expression block.
+     */
     PopulateData customerData = () -> {
         try {
             ObservableList<Customer> customerData = FXCollections.observableArrayList();
@@ -79,6 +81,9 @@ public class CustomerScreen implements Initializable {
         customerData.poplateData();
     }
 
+    /**
+     * Add Button Handler. This method calls the Add Customer screen.
+     */
     public void addButtonHandler() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/AddCustomerScreen.fxml"));
@@ -97,6 +102,9 @@ public class CustomerScreen implements Initializable {
         }
     }
 
+    /**
+     * Modify Button Handler. This button calls the Modify Customer screen.
+     */
     public void modifyButtonHandler() {
 
         try {
@@ -119,11 +127,19 @@ public class CustomerScreen implements Initializable {
         }
     }
 
+    /**
+     * Exit Button Handler. This method closes the screen.
+     */
     public void exitButtonHandler() {
         Stage stage = (Stage) exitCustomerButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Delete Button Handler. This method tries to delete the selected Customer. If the customer has appointments, a
+     * custom error message displays saying that all appointments must this customer must be deleted before deleting the
+     * customer.
+     */
     public void deleteButtonHandler() {
         try {
             int customerID = customerTable.getSelectionModel().getSelectedItem().getId();
@@ -161,6 +177,9 @@ public class CustomerScreen implements Initializable {
         }
     }
 
+    /**
+     * Refresh Data Handler. This method re-loads the customer data in the table.
+     */
     public void refreshDataHandler() {
         customerData.poplateData();
     }

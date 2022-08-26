@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * This class is the Database Connection class. It is used to store all the String variables used to create the URL for
+ * the Database Connection. Also stores the username and password for database connections.
+ */
 public class DBConnection {
 
     private static final String protocol = "jdbc";
@@ -20,8 +24,10 @@ public class DBConnection {
     private static Connection conn = null;
 
 
-    /* Attempts to start the connection to the database. Throws error if the driver
-    *  is not found or if there is a connection issue*/
+    /**
+     * Attempts to start the connection to the database. Throws error if the driver
+     * is not found or if there is a connection issue.
+     */
     public static Connection startConn(){
         try {
             Class.forName(mySQLJBDCDriver);
@@ -36,10 +42,17 @@ public class DBConnection {
         return conn;
     }
 
+    /**
+     * Getter method for the open connection.
+     * @return Returns the currently open connection object.
+     */
     public static Connection getConn(){
         return conn;
     }
 
+    /**
+     * Closes the database connection.
+     */
     public static void endConn(){
         try{
             conn.close();
