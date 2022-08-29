@@ -3,3 +3,8 @@ Username: test
 Password: test
 Date/Time: 2022-08-25T19:42:27.520791200-07:00[GMT-07:00]
 
+Login Successful with
+Username: test
+Password: test
+Date/Time: 2022-08-28T23:59:42.893429100-05:00[America/Chicago]
+

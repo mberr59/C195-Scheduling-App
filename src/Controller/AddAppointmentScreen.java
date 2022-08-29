@@ -122,7 +122,7 @@ public class AddAppointmentScreen implements Initializable {
             if (isValidAddDT.validateDateTime(appEndDateTime)) {
                 if (appStartDateTime.isBefore(appEndDateTime)) {
                     LocalDateTime ldtStart =  LocalDateTime.ofInstant(appStartDateTime, ZoneId.of("UTC"));
-                    LocalDateTime ldtEnd =  LocalDateTime.ofInstant(appEndDateTime, ZoneId.of("UTC"));;
+                    LocalDateTime ldtEnd =  LocalDateTime.ofInstant(appEndDateTime, ZoneId.of("UTC"));
                     if (checkForOverlap(appAddCustomerID, ldtStart, ldtEnd)) {
                         return;
                     }

@@ -44,7 +44,7 @@ public class LoginScreen implements Initializable {
     public Alert usernameAlert = new Alert(Alert.AlertType.ERROR);
     public Alert passwordAlert = new Alert(Alert.AlertType.ERROR);
     private final ZoneId z = ZoneId.systemDefault();
-    private final File loginLogs = new File("C:\\Users\\LabUser\\IdeaProjects\\C195-Scheduling-App\\login-activity.txt");
+    private final File loginLogs = new File("login-activity.txt");
 
     /**
      * Username Check Handler. Takes the entered username and checks the database to see if the username exists. If French
