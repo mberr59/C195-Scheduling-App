@@ -33,17 +33,6 @@ public class AddAppointmentScreen implements Initializable {
     public ComboBox<LocalTime> addAppStartTime;
     public ComboBox<LocalTime> addAppEndTime;
 
-    /**
-     * Lambda expression 3. Creates a ConvertDateTime Interface. A timestamp object is passed to the method and then
-     * is converted to EST. The converted timestamp is then returned.
-     */
-    ConvertDateTime timestampConversion = (timestamp) -> {
-        LocalDateTime localDT = timestamp.toLocalDateTime();
-        ZonedDateTime zonedDT = localDT.atZone(ZoneId.systemDefault());
-        ZonedDateTime convertedZDT = zonedDT.withZoneSameInstant(ZoneId.of("America/New_York"));
-        LocalDateTime convertedLDT = convertedZDT.toLocalDateTime();
-        return Timestamp.valueOf(convertedLDT);
-    };
 
     /**
      * Lambda expression 2. Creates a PopulateData Interface and passes instructions to add the Appointment data
@@ -97,7 +86,6 @@ public class AddAppointmentScreen implements Initializable {
      * Interface, then checking the date to confirm it is a weekday also checking the time is 8am to 10pm EST through
      * a Lambda expression.
      *
-     *
      */
     public void addAppSaveHandler() {
         Connection conn = DBConnection.getConn();
@@ -119,31 +107,23 @@ public class AddAppointmentScreen implements Initializable {
             ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
             ZonedDateTime eastDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("America/New_York"));
 
-            if (eastDateTime.getDayOfWeek().equals(DayOfWeek.SATURDAY) || eastDateTime.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
-                Alert dayAlert = new Alert(Alert.AlertType.ERROR);
-                dayAlert.setTitle("Invalid Day");
-                dayAlert.setContentText("Please enter a valid workday (Mon-Fri).");
-                dayAlert.showAndWait();
-                return false;
-            } else if ((eastDateTime.getHour() < 8) || (eastDateTime.getHour() > 22)) {
-                Alert timeAlert = new Alert(Alert.AlertType.ERROR);
-                timeAlert.setTitle("Invalid Time");
-                timeAlert.setContentText("Please enter a valid time between 8am and 10pm EST.");
-                timeAlert.showAndWait();
-                return false;
-            } else {
-                return true;
-            }
-        };
+         if ((eastDateTime.getHour() < 8) || (eastDateTime.getHour() > 22)) {
+            Alert timeAlert = new Alert(Alert.AlertType.ERROR);
+            timeAlert.setTitle("Invalid Time");
+            timeAlert.setContentText("Please enter a valid time between 8am and 10pm EST.");
+            timeAlert.showAndWait();
+            return false;
+        } else {
+            return true;
+        }
+    };
 
         if (isValidAddDT.validateDateTime(appStartDateTime)) {
             if (isValidAddDT.validateDateTime(appEndDateTime)) {
                 if (appStartDateTime.isBefore(appEndDateTime)) {
-                    Timestamp appAddStartTimestamp = Timestamp.from(appStartDateTime);
-                    Timestamp convertedStartTimestamp = timestampConversion.convertDateTime(appAddStartTimestamp);
-                    Timestamp appAddEndTimestamp = Timestamp.from(appEndDateTime);
-                    Timestamp convertedEndTimestamp = timestampConversion.convertDateTime(appAddEndTimestamp);
-                    if (checkForOverlap(appAddCustomerID, appAddStartTimestamp, appAddEndTimestamp)) {
+                    LocalDateTime ldtStart =  LocalDateTime.ofInstant(appStartDateTime, ZoneId.of("UTC"));
+                    LocalDateTime ldtEnd =  LocalDateTime.ofInstant(appEndDateTime, ZoneId.of("UTC"));;
+                    if (checkForOverlap(appAddCustomerID, ldtStart, ldtEnd)) {
                         return;
                     }
                     try {
@@ -157,8 +137,8 @@ public class AddAppointmentScreen implements Initializable {
                         addAppointmentData.setString(2, appDesc);
                         addAppointmentData.setString(3, appLocation);
                         addAppointmentData.setString(4, appType);
-                        addAppointmentData.setTimestamp(5, convertedStartTimestamp);
-                        addAppointmentData.setTimestamp(6, convertedEndTimestamp);
+                        addAppointmentData.setTimestamp(5, Timestamp.valueOf(ldtStart));
+                        addAppointmentData.setTimestamp(6, Timestamp.valueOf(ldtEnd));
                         addAppointmentData.setInt(7, appAddCustomerID);
                         addAppointmentData.setInt(8, appAddUserID);
                         addAppointmentData.setInt(9, contactID);
@@ -221,34 +201,32 @@ public class AddAppointmentScreen implements Initializable {
      * @return Returns a boolean overlapDetected. If false the data is added to the server. If true the program is halted
      * until the user enters data again.
      */
-    public boolean checkForOverlap(int c_ID, Timestamp startTime, Timestamp endTime) {
+    public boolean checkForOverlap(int c_ID, LocalDateTime startTime, LocalDateTime endTime) {
         boolean overlapDetected = false;
         try {
             Connection connection = DBConnection.getConn();
             Alert overlapAlert = new Alert(Alert.AlertType.ERROR);
-            LocalDateTime proposedStart = startTime.toLocalDateTime();
-            LocalDateTime proposedEnd = endTime.toLocalDateTime();
             PreparedStatement appStatement = connection.prepareStatement(QueryExecutions.getAppTimestampCustomer());
             appStatement.setInt(1, c_ID);
             ResultSet appRS = appStatement.executeQuery();
             while (appRS.next()) {
                 LocalDateTime savedStart = appRS.getTimestamp("Start").toLocalDateTime();
                 LocalDateTime savedEnd = appRS.getTimestamp("End").toLocalDateTime();
-                if ((savedStart.isAfter(proposedStart) || savedStart.isEqual(proposedStart)) && savedStart.isBefore(proposedEnd)) {
+                if ((savedStart.isAfter(startTime) || savedStart.isEqual(startTime)) && savedStart.isBefore(endTime)) {
                     overlapAlert.setTitle("Overlapping Appointments");
                     overlapAlert.setContentText("This time conflicts with an already scheduled appointment.\n" +
                             "Please enter a different time.");
                     overlapAlert.showAndWait();
                     overlapDetected = true;
 
-                } else if (savedEnd.isAfter(proposedStart) && (savedEnd.isBefore(proposedEnd) || savedEnd.isEqual(proposedEnd))) {
+                } else if (savedEnd.isAfter(startTime) && (savedEnd.isBefore(endTime) || savedEnd.isEqual(endTime))) {
                     overlapAlert.setTitle("Overlapping Appointments");
                     overlapAlert.setContentText("This time conflicts with an already scheduled appointment.\n" +
                             "Please enter a different time.");
                     overlapAlert.showAndWait();
                     overlapDetected = true;
 
-                } else if ((savedStart.isBefore(proposedStart) || savedStart.isEqual(proposedStart)) && (savedEnd.isAfter(proposedEnd) || savedEnd.isEqual(proposedEnd))) {
+                } else if ((savedStart.isBefore(startTime) || savedStart.isEqual(startTime)) && (savedEnd.isAfter(endTime) || savedEnd.isEqual(endTime))) {
                     overlapAlert.setTitle("Overlapping Appointments");
                     overlapAlert.setContentText("This time conflicts with an already scheduled appointment.\n" +
                             "Please enter a different time.");

@@ -1,5 +1,6 @@
 package Controller;
 
+import Helper.ConvertDateTime;
 import Helper.DBConnection;
 import Helper.QueryExecutions;
 import Model.Appointment;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -48,13 +50,24 @@ public class AppointmentScreen implements Initializable {
     public RadioButton byMonthRadio;
     public RadioButton byWeekRadio;
     public final ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
-    public LocalDateTime startDateTime;
     public Button appFilter;
     public ToggleGroup filterGroup;
     public Button appDelete;
     public Button appExit;
     public Button appReports;
     public int loginID;
+
+    /**
+     * Lambda expression 3. Creates a ConvertDateTime Interface. A timestamp object is passed to the method and then
+     * is converted to EST. The converted timestamp is then returned.
+     */
+    ConvertDateTime timestampConversion = (timestamp) -> {
+
+        LocalDateTime serverDT = timestamp.toLocalDateTime();
+        ZonedDateTime zonedDT = serverDT.atZone(ZoneId.of("UTC"));
+        ZonedDateTime convertedZoneDT = zonedDT.withZoneSameInstant(ZoneId.of(ZoneId.systemDefault().toString()));
+        return convertedZoneDT.toLocalDateTime();
+    };
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) { loadAppointments(loginID); }
@@ -126,10 +139,12 @@ public class AppointmentScreen implements Initializable {
                 String location = rs.getString("Location");
                 String type = rs.getString("Type");
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy hh':'mm a");
-                startDateTime = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime endDateTime = rs.getTimestamp("End").toLocalDateTime();
-                String startDTString = dateTimeFormatter.format(startDateTime);
-                String endDTString = dateTimeFormatter.format(endDateTime);
+                Timestamp startDTToConvert = rs.getTimestamp("Start");
+                LocalDateTime convertedStartDT = timestampConversion.convertDateTime(startDTToConvert);
+                Timestamp endDTToConvert = rs.getTimestamp("End");
+                LocalDateTime convertedEndDT = timestampConversion.convertDateTime(endDTToConvert);
+                String startDTString = dateTimeFormatter.format(convertedStartDT);
+                String endDTString = dateTimeFormatter.format(convertedEndDT);
                 int customerID = rs.getInt("Customer_ID");
                 int userID = rs.getInt("User_ID");
                 int contactID = rs.getInt("Contact_ID");
