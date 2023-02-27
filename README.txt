@@ -9,7 +9,6 @@ README
    - Author - Micah Berry
    - Phone - 256-861-6648
    - E-mail - mberr59@wgu.edu
-   - Student ID - 000864671
    - Application version - 1.0
    - Date - 8/25/2022
 
